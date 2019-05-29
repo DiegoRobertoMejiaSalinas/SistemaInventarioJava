@@ -1,6 +1,6 @@
 package unmsm.edu.pe.fisi.almacen.model;
 
-public class Trabajador {
+public class Trabajador{
 
     private String nombre;
     private String apellido;
