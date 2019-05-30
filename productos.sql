@@ -1,3 +1,28 @@
+CREATE TABLE `almacendb`.`trabajador` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(45) NOT NULL,
+  `contrasena` VARCHAR(45) NOT NULL,
+  `nombre` VARCHAR(45) NOT NULL,
+  `apellido` VARCHAR(45) NOT NULL,
+  `telefono` VARCHAR(45) NOT NULL,
+  `dni` VARCHAR(45) NOT NULL,
+  `actualizado` INT NULL,
+  `administrador` INT NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+DROP TABLE IF EXISTS `venta`;
+
+CREATE TABLE `almacendb`.`venta` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `cliente` VARCHAR(45) NOT NULL,
+  `producto` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `almacendb`.`venta` 
+ADD COLUMN `dni` VARCHAR(45) NOT NULL AFTER `cliente`;
+
+
 DROP TABLE IF EXISTS `productos`;
 
 CREATE TABLE `productos` (

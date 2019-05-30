@@ -2,13 +2,27 @@ package unmsm.edu.pe.fisi.almacen.model;
 
 public class Trabajador{
 
+    private String usuario;
+    private String contrasena;
     private String nombre;
     private String apellido;
     private String telefono;
     private String dni;
     private int actualizado;
 
-    public Trabajador(String nombre, String apellido, String telefono, String dni, int actualizado) {
+    public Trabajador(String usuario, String contrasena, String nombre, String apellido, String telefono, String dni) {
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.dni = dni;
+        this.actualizado= 0;
+    }
+
+    public Trabajador(String usuario, String contrasena, String nombre, String apellido, String telefono, String dni, int actualizado) {
+        this.usuario = usuario;
+        this.contrasena = contrasena;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -16,13 +30,23 @@ public class Trabajador{
         this.actualizado = 1;
     }
 
-    public Trabajador(String nombre, String apellido, String telefono, String dni) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.telefono = telefono;
-        this.dni = dni;
-        actualizado = 0;
+    public String getUsuario() {
+        return usuario;
     }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    
 
     public String getNombre() {
         return nombre;

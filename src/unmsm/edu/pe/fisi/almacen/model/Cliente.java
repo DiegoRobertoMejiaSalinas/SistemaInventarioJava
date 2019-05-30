@@ -6,12 +6,17 @@ public class Cliente {
 
     private String nombre;
     private String dni;
-    private Cola productos;
+    private Cola<Producto> productos;
+    private int longitud;
 
     public Cliente(String nombre, String dni, Cola productos) {
         this.nombre = nombre;
         this.dni = dni;
         this.productos = productos;
+    }
+
+    public int getLongitud() {
+        return productos.getCantidad();
     }
 
     public String getNombre() {
@@ -30,7 +35,7 @@ public class Cliente {
         this.dni = dni;
     }
 
-    public Cola getProductos() {
+    public Cola<Producto> getProductos() {
         return productos;
     }
 

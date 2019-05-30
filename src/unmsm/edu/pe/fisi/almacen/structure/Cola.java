@@ -22,6 +22,16 @@ public class Cola<T> implements Iterable<T> {
         public void setDato(T dato) {
             this.dato = dato;
         }
+
+        public Nodo<T> getSgte() {
+            return sgte;
+        }
+
+        public void setSgte(Nodo<T> sgte) {
+            this.sgte = sgte;
+        }
+        
+        
         
     }
 
@@ -33,6 +43,7 @@ public class Cola<T> implements Iterable<T> {
     public Nodo<T> getCabecera() {
         return cabecera;
     }
+    
 
     public void setCabecera(Nodo<T> cabecera) {
         this.cabecera = cabecera;
@@ -117,11 +128,42 @@ public class Cola<T> implements Iterable<T> {
         }
 
     }
+    
+    ///////////////ITERADORES
+    private class IteradorDescendente implements Iterator<T> {
+
+        Nodo<T> aux;
+
+        public IteradorDescendente() {
+            aux = cabecera;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return aux != null;
+        }
+
+        @Override
+        public T next() {
+            T datoG = aux.dato;
+            aux = aux.sgte;
+            return datoG;
+        }
+
+    }
+
+    public Iterator<T> getDescendingIterator() {
+        return new IteradorDescendente();
+    }
+
+    
 
     @Override
     public Iterator<T> iterator() {
         return new IteradorCola();
     }
+    
+    
     
     public void ordenarPorBurbuja() {
         for (Nodo<T> i = cabecera; i != null; i = i.sgte) {

@@ -13,9 +13,9 @@ import java.util.Iterator;
  * @author Antony
  * @param <T>
  */
-public class ArbolBinario<T extends Comparable<T>> {
+public class ArbolBinario<T> {
 
-    private class NodoBinario<T> {
+    public class NodoBinario<T> {
 
         private NodoBinario izq;
         private NodoBinario der;
@@ -34,10 +34,21 @@ public class ArbolBinario<T extends Comparable<T>> {
         }
 
     }
+    
+    private int longitud= 0;
+    private Comparator<T> comparador;
+
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador= comparador;
+    }
+    
+    public Comparator<T> getComparador() {
+        return comparador;
+    }
 
     private NodoBinario<T> raiz;
     //COMPARADOR
-    private final Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
+    //private final Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
 
     public void insertar(T dato) {
         NodoBinario<T> nuevo = new NodoBinario<>(dato);
@@ -47,6 +58,7 @@ public class ArbolBinario<T extends Comparable<T>> {
     private boolean insertarRecursivo(NodoBinario<T> nuevo, NodoBinario<T> aux) {
         if (this.raiz == null) {
             raiz = nuevo;
+            
         } else {
             if (comparador.compare(nuevo.dato, aux.dato) < 0) {
                 if (aux.izq == null) {
@@ -66,8 +78,15 @@ public class ArbolBinario<T extends Comparable<T>> {
                 }
             }
         }
+        longitud++;
         return true;
     }
+
+    public int getLongitud() {
+        return longitud;
+    }
+    
+    
 
     //PREORDEN
     public void preOrden() {
@@ -113,6 +132,27 @@ public class ArbolBinario<T extends Comparable<T>> {
             postOrdenRecursivo(subarbol.der);
             System.out.println(subarbol.dato);
         }
+    }
+    
+    public NodoBinario<T> getMenor(){
+        NodoBinario<T> aux= raiz;
+        while(aux.izq!=null){
+            aux= aux.izq;
+        }
+        return aux;
+    }
+    
+    public NodoBinario<T> getMayor(){
+        NodoBinario<T> aux= raiz;
+        while(aux.der!=null){
+            aux= aux.der;
+        }
+        return aux;
+    }
+    
+    public NodoBinario<T> getRaiz(){
+        
+        return raiz;
     }
 
 }
