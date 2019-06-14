@@ -1,4 +1,4 @@
-package unmsm.edu.pe.fisi.almacen.structure;
+package pe.edu.unmsm.software.eapisw.structure;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -9,7 +9,6 @@ public class Cola<T> implements Iterable<T> {
         
         private Nodo<T> sgte;
         private T dato;
-        
 
         public Nodo(T dato) {
             this.dato = dato;
@@ -22,79 +21,60 @@ public class Cola<T> implements Iterable<T> {
         public void setDato(T dato) {
             this.dato = dato;
         }
-
-        public Nodo<T> getSgte() {
-            return sgte;
-        }
-
-        public void setSgte(Nodo<T> sgte) {
-            this.sgte = sgte;
-        }
-        
-        
         
     }
 
-    private Nodo<T> cabecera;
-    private Nodo<T> ultimo;
-    private int longitud= 0;
+    private Nodo<T> cab;
+    private Nodo<T> ult;
     private Comparator<T> comparador;
 
-    public Nodo<T> getCabecera() {
-        return cabecera;
-    }
-    
-
-    public void setCabecera(Nodo<T> cabecera) {
-        this.cabecera = cabecera;
+    public Nodo<T> getCab() {
+        return cab;
     }
 
-    public Nodo<T> getUltimo() {
-        return ultimo;
+    public void setCab(Nodo<T> cab) {
+        this.cab = cab;
     }
 
-    public void setUltimo(Nodo<T> ultimo) {
-        this.ultimo = ultimo;
+    public Nodo<T> getUlt() {
+        return ult;
+    }
+
+    public void setUlt(Nodo<T> ult) {
+        this.ult = ult;
     }
 
     public void encolar(T elementoNuevo) {
         Nodo<T> nuevo = new Nodo<>(elementoNuevo);
 
-        if (cabecera == null) {
-            cabecera = nuevo;
-            ultimo = nuevo;
+        if (cab == null) {
+            cab = nuevo;
+            ult = nuevo;
         } else {
-            Nodo<T> aux = cabecera;
+            Nodo<T> aux = cab;
             while (aux.sgte != null) {
                 aux = aux.sgte;
             }
             aux.sgte = nuevo;
-            ultimo = nuevo;
+            ult = nuevo;
         }
-        
-        longitud++;
 
     }
 
     public T desencolar() {
 
-        T aux = cabecera.dato;
-        if (cabecera == null) {
+        T aux = cab.dato;
+        if (cab == null) {
 
         } else {
-            cabecera = cabecera.sgte;
-            longitud--;
+            cab = cab.sgte;
         }
         return aux;
 
     }
-    
-    public int getCantidad(){
-        return this.longitud;
-    }
 
     public String mostrarElementos() {
-        Nodo<T> aux = cabecera;
+        Nodo<T> aux = cab;
         String represenCad = "";
         while (aux != null) {
             represenCad += aux.dato + ", ";
@@ -113,7 +93,7 @@ public class Cola<T> implements Iterable<T> {
 
     class IteradorCola implements Iterator<T> {
 
-        Nodo<T> aux = cabecera;
+        Nodo<T> aux = cab;
 
         @Override
         public boolean hasNext() {
@@ -128,45 +108,14 @@ public class Cola<T> implements Iterable<T> {
         }
 
     }
-    
-    ///////////////ITERADORES
-    private class IteradorDescendente implements Iterator<T> {
-
-        Nodo<T> aux;
-
-        public IteradorDescendente() {
-            aux = cabecera;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return aux != null;
-        }
-
-        @Override
-        public T next() {
-            T datoG = aux.dato;
-            aux = aux.sgte;
-            return datoG;
-        }
-
-    }
-
-    public Iterator<T> getDescendingIterator() {
-        return new IteradorDescendente();
-    }
-
-    
 
     @Override
     public Iterator<T> iterator() {
         return new IteradorCola();
     }
     
-    
-    
     public void ordenarPorBurbuja() {
-        for (Nodo<T> i = cabecera; i != null; i = i.sgte) {
+        for (Nodo<T> i = cab; i != null; i = i.sgte) {
             for (Nodo<T> j = i; j != null; j = j.sgte) {
                 if (comparador.compare(i.dato, j.dato) > 0) {
                     //Intercambiar
@@ -184,7 +133,7 @@ public class Cola<T> implements Iterable<T> {
 
     @Override
     public String toString() {
-        return "Cola{" + "cabecera=" + cabecera + '}';
+        return "Cola{" + "cabecera=" + cab + '}';
     }
 
 }

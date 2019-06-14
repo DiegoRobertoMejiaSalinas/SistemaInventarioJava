@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package unmsm.edu.pe.fisi.almacen.structure;
+
+package pe.edu.unmsm.software.eapisw.structure;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -190,7 +186,7 @@ public class ListaDoble<T> implements Iterable<T> {
         return new IteradorAscendente();
     }
 
-    private boolean esElementoIndex(int index) {
+    private boolean isElementIndex(int index) {
         return index >= 0 && index < cant;
     }
 
@@ -198,8 +194,8 @@ public class ListaDoble<T> implements Iterable<T> {
         return "Index: " + index + ", Size: " + cant;
     }
 
-    private void verificarElemento(int index) {
-        if (!esElementoIndex(index)) {
+    private void checkElementIndex(int index) {
+        if (!isElementIndex(index)) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
         }
     }
@@ -221,7 +217,7 @@ public class ListaDoble<T> implements Iterable<T> {
     }
 
     public T get(int index) {
-        verificarElemento(index);
+        checkElementIndex(index);
         return node(index).dato;
     }
 
