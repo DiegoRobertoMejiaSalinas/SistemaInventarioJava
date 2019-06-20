@@ -1,19 +1,24 @@
 package pe.edu.unmsm.software.eapisw.model;
 
-public class Producto {
+public class Producto implements Comparable<Producto>{
 
     private String codigo;
     private String nombre;
+    private String descripcion;
+    private String caracteristicas;
     private int stock;
-    private double precioVenta;
-    private double precioCompra;
+    private double precio_venta;
 
-    public Producto(String codigo, String nombre, int stock, double precioVenta, double precioCompra) {
+    public Producto(String codigo, String nombre, String descripcion, String caracteristicas, int stock, double precio_venta) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.caracteristicas = caracteristicas;
         this.stock = stock;
-        this.precioVenta = precioVenta;
-        this.precioCompra = precioCompra;
+        this.precio_venta = precio_venta;
+    }
+
+    public Producto() {
     }
 
     public String getCodigo() {
@@ -32,6 +37,22 @@ public class Producto {
         this.nombre = nombre;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getCaracteristicas() {
+        return caracteristicas;
+    }
+
+    public void setCaracteristicas(String caracteristicas) {
+        this.caracteristicas = caracteristicas;
+    }
+
     public int getStock() {
         return stock;
     }
@@ -40,25 +61,22 @@ public class Producto {
         this.stock = stock;
     }
 
-    public double getPrecioVenta() {
-        return precioVenta;
+    public double getPrecio_venta() {
+        return precio_venta;
     }
 
-    public void setPrecioVenta(double precioVenta) {
-        this.precioVenta = precioVenta;
-    }
-
-    public double getPrecioCompra() {
-        return precioCompra;
-    }
-
-    public void setPrecioCompra(double precioCompra) {
-        this.precioCompra = precioCompra;
+    public void setPrecio_venta(double precio_venta) {
+        this.precio_venta = precio_venta;
     }
 
     @Override
     public String toString() {
-        return "Producto{" + "codigo=" + codigo + ", nombre=" + nombre + ", stock=" + stock + ", precioVenta=" + precioVenta + ", precioCompra=" + precioCompra + '}';
+        return "Producto{" + "codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", caracteristicas=" + caracteristicas + ", stock=" + stock + ", precio_venta=" + precio_venta + '}';
+    }
+
+    @Override
+    public int compareTo(Producto o) {
+        return this.codigo.compareTo(o.codigo);
     }
 
 }

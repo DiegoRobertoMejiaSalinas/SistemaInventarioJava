@@ -10,6 +10,7 @@ import java.util.List;
 public class ArbolAVL<T extends Comparable<T>> {
 
     private final Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
+    private int cantidad = 0;
 
     public class NodoAVL<T> {
 
@@ -63,22 +64,24 @@ public class ArbolAVL<T extends Comparable<T>> {
 
     }
 
-    private int getAltura(NodoAVL subarbol) {
+    public int getAltura(NodoAVL subarbol) {
         if (subarbol == null) {
             return 0;
         }
         return subarbol.altura;
     }
 
-    private NodoAVL insertar(NodoAVL<T> nodo, T valor) {
+    public NodoAVL insertar(NodoAVL<T> nodo, T valor) {
         //Para arbol ABB
         if (nodo == null) {
+            cantidad++;
             return (new NodoAVL(valor));
         }
 
         if (comparador.compare(valor, nodo.dato) < 0) { //valor < nodo.dato
             nodo.izquierda = insertar(nodo.izquierda, valor);
-        } else {
+
+        } else if (comparador.compare(valor, nodo.dato) > 0) {
             nodo.derecha = insertar(nodo.derecha, valor);
         }
 
@@ -88,7 +91,7 @@ public class ArbolAVL<T extends Comparable<T>> {
         //Consigue el balance del nodo
         int balance = getBalance(nodo);
 
-       // Caso Izquierdo Izquierdo
+        // Caso Izquierdo Izquierdo
         if (balance > 1 && comparador.compare(valor, nodo.izquierda.dato) < 0) { //valor < nodo.izquierda.dato
             return rotacionDerecha(nodo);
         }
@@ -160,7 +163,7 @@ public class ArbolAVL<T extends Comparable<T>> {
         }
     }
 
-    private NodoAVL nodoMinimo(NodoAVL node) {
+    public NodoAVL nodoMinimo(NodoAVL node) {
         NodoAVL current = node;
         while (current.izquierda != null) {
             current = current.izquierda;
@@ -168,7 +171,11 @@ public class ArbolAVL<T extends Comparable<T>> {
         return current;
     }
 
-    private NodoAVL borrarNodo(NodoAVL<T> raiz, T value) {
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public NodoAVL borrarNodo(NodoAVL<T> raiz, T value) {
         // Hará borrado ABB
         if (raiz == null) {
             return raiz;
@@ -194,11 +201,13 @@ public class ArbolAVL<T extends Comparable<T>> {
                 if (aux == null) {
                     aux = raiz;
                     raiz = null;
+
                 } else // Un solo hijo
                 {
                     raiz = aux; // Copia el contenido del hijo no vacio
                 }
                 aux = null;
+                cantidad--;
             } else {
                 // Nodo con dos hijos: Consigue el sucesor inOrden
                 // (El más pequeño en el subarbol derecho)
@@ -259,8 +268,8 @@ public class ArbolAVL<T extends Comparable<T>> {
                 width = (int) Math.pow(2, height - 1);
 
         // Preparing variables for loop.
-        List<NodoAVL> current = new ArrayList<NodoAVL>(1),
-                next = new ArrayList<NodoAVL>(2);
+        List<NodoAVL> current = new ArrayList<NodoAVL>(1);
+        List<NodoAVL> next = new ArrayList<NodoAVL>(2);
         current.add(root);
 
         final int maxHalfLength = 4;
@@ -335,6 +344,16 @@ public class ArbolAVL<T extends Comparable<T>> {
 
     }
 
+    public static void main(String[] args) {
+        ArbolAVL t = new ArbolAVL();
+        ArbolAVL.NodoAVL root = null;
+        root = t.insertar(root, 6);
+        root = t.insertar(root, 2);
+        root = t.insertar(root, 1);
+
+        t.imprimirArbolito(root);
+        //t.
+    }
     /*public static void main(String args[]) {
      ArbolAVL t = new ArbolAVL();
      ArbolAVL.NodoAVL root = null;
@@ -358,6 +377,8 @@ public class ArbolAVL<T extends Comparable<T>> {
      }
 
      t.imprimirArbolito(root);
+     System.out.println("\n\nCantidad: " + t.getCantidad());
+
      } catch (IOException e) {
      e.printStackTrace();
      }

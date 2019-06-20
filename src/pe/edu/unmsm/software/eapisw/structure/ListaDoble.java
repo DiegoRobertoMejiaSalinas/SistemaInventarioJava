@@ -1,4 +1,3 @@
-
 package pe.edu.unmsm.software.eapisw.structure;
 
 import java.util.Comparator;
@@ -41,8 +40,6 @@ public class ListaDoble<T> implements Iterable<T> {
         public void setAnt(NodoDoble<T> ant) {
             this.ant = ant;
         }
-        
-        
 
     }
 
@@ -256,7 +253,24 @@ public class ListaDoble<T> implements Iterable<T> {
 
     @Override
     public String toString() {
-        return "Lista{" + "cabecera=" + cabecera + '}';
+        NodoDoble<T> aux = cabecera;
+        String cont = "";
+        while (aux != null) {
+            cont += aux.getDato() + "\n";
+            aux = aux.getSig();
+        }
+        return cont;
+    }
+
+    public static void main(String[] args) {
+        ListaDoble<Integer> lista = new ListaDoble<>();
+        lista.insertarAlFinal(5);
+        lista.insertarAlFinal(2);
+        lista.insertarAlFinal(54);
+        lista.insertarAlFinal(23);
+        lista.insertarAlFinal(1);
+        lista.insertarAlFinal(67);
+        System.out.println(lista);
     }
 
 }

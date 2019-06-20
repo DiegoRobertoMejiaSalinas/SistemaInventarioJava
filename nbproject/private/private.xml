@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/dao/InterfaceDAO.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/model/Producto.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/structure/ListaDoble.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/structure/ArbolRojoNegro.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/structure/ArbolAVL.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/structure/ArbolBinario.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/dao/implement/ProductoDAOImpl.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/dao/AccesoDB.java</file>
+            <file>file:/C:/Users/Purple/Desktop/ProyectoEDI/src/pe/edu/unmsm/software/eapisw/service/ProductoServiceImpl.java</file>
+        </group>
     </open-files>
 </project-private>
