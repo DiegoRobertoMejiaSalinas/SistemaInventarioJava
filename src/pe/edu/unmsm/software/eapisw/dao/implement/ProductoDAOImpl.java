@@ -68,7 +68,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
     }
     
     public Producto readArbolABB(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
     
     public Producto readArbolAVL(String id) {
@@ -134,7 +134,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
                 producto.setStock(rs.getInt(6));
                 producto.setPrecio_venta(rs.getDouble(7));
 
-                arbolAVL.insertar(raiz, producto);
+                arbolAVL.insertar(producto);
             }
 
         } catch (SQLException e) {
@@ -242,7 +242,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
                 producto.setStock(rs.getInt(6));
                 producto.setPrecio_venta(rs.getDouble(7));
 
-                listaDoble.insertarAlFinal(producto);
+                listaDoble.setLast(producto);
             }
 
         } catch (SQLException e) {

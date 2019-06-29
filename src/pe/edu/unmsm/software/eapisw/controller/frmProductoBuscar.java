@@ -18,8 +18,9 @@ import pe.edu.unmsm.software.eapisw.service.ProductoServiceImpl;
  */
 public class frmProductoBuscar extends javax.swing.JFrame {
 
+
     private ProductoDAOImpl dbProducto = new ProductoDAOImpl();
-    ProductoServiceImpl productoService = new ProductoServiceImpl();
+    //ProductoServiceImpl productoService = new ProductoServiceImpl();
     private ArrayList<Producto> arrayList = dbProducto.read();
 
     public frmProductoBuscar() {
@@ -27,23 +28,55 @@ public class frmProductoBuscar extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
-        mostrarListaDoble();
     }
 
     void mostrarArrayList() {
+        ProductoServiceImpl productoService = new ProductoServiceImpl();
+
         DefaultTableModel modelo;
         modelo = productoService.mostrarArrayList();
-
         Tabla.setModel(modelo);
     }
 
     void mostrarListaDoble() {
+        ProductoServiceImpl productoService = new ProductoServiceImpl();
+
         DefaultTableModel modelo;
-
         modelo = productoService.mostrarListaDoble();
-
         Tabla.setModel(modelo);
+    }
 
+    void mostrarCola() {
+        ProductoServiceImpl productoService = new ProductoServiceImpl();
+
+        DefaultTableModel modelo;
+        modelo = productoService.mostrarCola();
+        Tabla.setModel(modelo);
+        //System.out.println(productoService.cola.getLongitud());
+    }
+
+    void mostrarArbolABB() {
+        ProductoServiceImpl productoService = new ProductoServiceImpl();
+
+        DefaultTableModel modelo;
+        modelo = productoService.mostrarArbolABB();
+        Tabla.setModel(modelo);
+    }
+
+    void mostrarArbolAVL() {
+        ProductoServiceImpl productoService = new ProductoServiceImpl();
+
+        DefaultTableModel modelo;
+        modelo = productoService.mostrarArbolAVL();
+        Tabla.setModel(modelo);
+    }
+
+    void mostrarArbolRN() {
+        ProductoServiceImpl productoService = new ProductoServiceImpl();
+
+        DefaultTableModel modelo;
+        modelo = productoService.mostrarArbolRN();
+        Tabla.setModel(modelo);
     }
 
     /**
@@ -57,40 +90,198 @@ public class frmProductoBuscar extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        btnArrayList = new javax.swing.JButton();
+        btnListaDoble = new javax.swing.JButton();
+        btnCola = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        btnArbolABB = new javax.swing.JButton();
+        btnArbolAVL = new javax.swing.JButton();
+        btnArbolRN = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtTiempo = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtEstructura = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(808, 531));
-        setPreferredSize(new java.awt.Dimension(808, 531));
+        setMinimumSize(new java.awt.Dimension(808, 569));
+        setPreferredSize(new java.awt.Dimension(808, 569));
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Nombre", "Descripcion", "Caracteristicas", "Stock", "Precio Venta"
+                "Int", "Codigo", "Nombre", "Descripcion", "Caracteristicas", "Stock", "Precio Venta"
             }
         ));
         jScrollPane1.setViewportView(Tabla);
+
+        jLabel1.setText("Mostrar");
+
+        btnArrayList.setText("ArrayList");
+        btnArrayList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArrayListActionPerformed(evt);
+            }
+        });
+
+        btnListaDoble.setText("Lista Doble");
+        btnListaDoble.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaDobleActionPerformed(evt);
+            }
+        });
+
+        btnCola.setText("Cola");
+        btnCola.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnColaActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("__________________");
+
+        btnArbolABB.setText("Arbol ABB");
+        btnArbolABB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArbolABBActionPerformed(evt);
+            }
+        });
+
+        btnArbolAVL.setText("Arbol AVL");
+        btnArbolAVL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArbolAVLActionPerformed(evt);
+            }
+        });
+
+        btnArbolRN.setText("Arbol R-N");
+        btnArbolRN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArbolRNActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Tiempo:");
+
+        txtTiempo.setEnabled(false);
+
+        jLabel4.setText("Estructura:");
+
+        txtEstructura.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(159, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(btnArrayList)
+                    .addComponent(btnListaDoble)
+                    .addComponent(btnCola)
+                    .addComponent(jLabel2)
+                    .addComponent(btnArbolABB)
+                    .addComponent(btnArbolAVL)
+                    .addComponent(btnArbolRN))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(85, 85, 85)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtEstructura, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(186, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1)
+                        .addGap(15, 15, 15)
+                        .addComponent(btnArrayList)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnListaDoble)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCola)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addGap(29, 29, 29)
+                        .addComponent(btnArbolABB)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnArbolAVL)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnArbolRN))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtEstructura, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnArrayListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArrayListActionPerformed
+        long INICIO_MS = System.currentTimeMillis();
+        mostrarArrayList();
+        long DURACION_MS = System.currentTimeMillis() - INICIO_MS;
+        txtTiempo.setText(String.valueOf(DURACION_MS)+ " ms.");
+        txtEstructura.setText("ArrayList");
+    }//GEN-LAST:event_btnArrayListActionPerformed
+
+    private void btnListaDobleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaDobleActionPerformed
+        long INICIO_MS = System.currentTimeMillis();
+        mostrarListaDoble();
+        long DURACION_MS = System.currentTimeMillis() - INICIO_MS;
+        txtTiempo.setText(String.valueOf(DURACION_MS)+ " ms.");
+        txtEstructura.setText("Lista Doble");
+    }//GEN-LAST:event_btnListaDobleActionPerformed
+
+    private void btnColaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColaActionPerformed
+        long INICIO_MS = System.currentTimeMillis();
+        mostrarCola();
+        long DURACION_MS = System.currentTimeMillis() - INICIO_MS;
+        txtTiempo.setText(String.valueOf(DURACION_MS)+ " ms.");
+        txtEstructura.setText("Cola");
+    }//GEN-LAST:event_btnColaActionPerformed
+
+    private void btnArbolABBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArbolABBActionPerformed
+        long INICIO_MS = System.currentTimeMillis();
+        mostrarArbolABB();
+        long DURACION_MS = System.currentTimeMillis() - INICIO_MS;
+        txtTiempo.setText(String.valueOf(DURACION_MS)+ " ms.");
+        txtEstructura.setText("Arbol ABB");
+    }//GEN-LAST:event_btnArbolABBActionPerformed
+
+    private void btnArbolAVLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArbolAVLActionPerformed
+        long INICIO_MS = System.currentTimeMillis();
+        mostrarArbolAVL();
+        long DURACION_MS = System.currentTimeMillis() - INICIO_MS;
+        txtTiempo.setText(String.valueOf(DURACION_MS)+ " ms.");
+        txtEstructura.setText("Arbol AVL");
+    }//GEN-LAST:event_btnArbolAVLActionPerformed
+
+    private void btnArbolRNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArbolRNActionPerformed
+        long INICIO_MS = System.currentTimeMillis();
+        mostrarArbolRN();
+        long DURACION_MS = System.currentTimeMillis() - INICIO_MS;
+        txtTiempo.setText(String.valueOf(DURACION_MS)+ " ms.");
+        txtEstructura.setText("Arbol Rojo Negro");
+    }//GEN-LAST:event_btnArbolRNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -130,6 +321,18 @@ public class frmProductoBuscar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;
+    private javax.swing.JButton btnArbolABB;
+    private javax.swing.JButton btnArbolAVL;
+    private javax.swing.JButton btnArbolRN;
+    private javax.swing.JButton btnArrayList;
+    private javax.swing.JButton btnCola;
+    private javax.swing.JButton btnListaDoble;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField txtEstructura;
+    private javax.swing.JTextField txtTiempo;
     // End of variables declaration//GEN-END:variables
 }

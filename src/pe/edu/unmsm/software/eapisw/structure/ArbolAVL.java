@@ -11,10 +11,11 @@ public class ArbolAVL<T extends Comparable<T>> {
 
     private final Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
     private int cantidad = 0;
+    private NodoAVL<T> raiz;
 
     public class NodoAVL<T> {
 
-        private NodoAVL<T> izquierda, derecha, padre;
+        public NodoAVL<T> izquierda, derecha, padre;
         private int altura = 1;
         private T dato;
 
@@ -71,7 +72,15 @@ public class ArbolAVL<T extends Comparable<T>> {
         return subarbol.altura;
     }
 
-    public NodoAVL insertar(NodoAVL<T> nodo, T valor) {
+    //public NodoAVL<T> insertar(T valor){
+    public void insertar(T valor) {
+
+        //NodoAVL<T> nuevo = new NodoAVL<>(valor);
+        //insertarRecursivo(raizDef, nuevo);
+        raiz = insertarRecursivo(raiz, valor);
+    }
+
+    private NodoAVL<T> insertarRecursivo(NodoAVL<T> nodo, T valor) {
         //Para arbol ABB
         if (nodo == null) {
             cantidad++;
@@ -79,10 +88,10 @@ public class ArbolAVL<T extends Comparable<T>> {
         }
 
         if (comparador.compare(valor, nodo.dato) < 0) { //valor < nodo.dato
-            nodo.izquierda = insertar(nodo.izquierda, valor);
+            nodo.izquierda = insertarRecursivo(nodo.izquierda, valor);
 
         } else if (comparador.compare(valor, nodo.dato) > 0) {
-            nodo.derecha = insertar(nodo.derecha, valor);
+            nodo.derecha = insertarRecursivo(nodo.derecha, valor);
         }
 
         //Actualiza la altura del nodo anterior
@@ -158,7 +167,8 @@ public class ArbolAVL<T extends Comparable<T>> {
     public void preOrden(NodoAVL root) {
         if (root != null) {
             preOrden(root.izquierda);
-            System.out.printf("%d ", root.dato);
+            //System.out.printf("%d ", root.dato);
+            //System.out.println(root.getDato());
             preOrden(root.derecha);
         }
     }
@@ -175,7 +185,12 @@ public class ArbolAVL<T extends Comparable<T>> {
         return cantidad;
     }
 
-    public NodoAVL borrarNodo(NodoAVL<T> raiz, T value) {
+    public void borrar(T value) {
+        raiz = borrarNodo(raiz, value);
+
+    }
+
+    private NodoAVL borrarNodo(NodoAVL<T> raiz, T value) {
         // Hará borrado ABB
         if (raiz == null) {
             return raiz;
@@ -255,6 +270,42 @@ public class ArbolAVL<T extends Comparable<T>> {
         }
 
         return raiz;
+    }
+
+    public NodoAVL<T> getRaiz() {
+        return this.raiz;
+    }
+
+    //Buscar dato
+    public NodoAVL<T> buscar(T dato) {
+        NodoAVL<T> aux = raiz;
+        while (comparador.compare(aux.getDato(), dato) != 0) {
+            if (comparador.compare(dato, aux.getDato()) < 0) {
+                aux = aux.izquierda;
+            } else {
+                aux = aux.derecha;
+            }
+            if (aux == null) {
+                return null;
+            }
+        }
+        //System.out.println(aux);
+        return aux;
+    }
+
+    ArrayList<T> arrayL = new ArrayList<>();
+
+    private void getArray(NodoAVL<T> subarbol) {
+        if (subarbol != null) {
+            getArray(subarbol.izquierda);
+            arrayL.add(subarbol.getDato());
+            getArray(subarbol.derecha);
+        }
+    }
+
+    public ArrayList getInOrden() {
+        getArray(raiz);
+        return arrayL;
     }
 
     public void imprimirArbolito(NodoAVL root) {
@@ -346,42 +397,22 @@ public class ArbolAVL<T extends Comparable<T>> {
 
     public static void main(String[] args) {
         ArbolAVL t = new ArbolAVL();
+
         ArbolAVL.NodoAVL root = null;
-        root = t.insertar(root, 6);
-        root = t.insertar(root, 2);
-        root = t.insertar(root, 1);
 
-        t.imprimirArbolito(root);
-        //t.
+        /*root= t.insertarRecursivo(root, 6);
+         root= t.insertarRecursivo(root,7);
+         root= t.insertarRecursivo(root,8);*/
+        t.insertar(6);
+        t.insertar(9);
+        t.insertar(12);
+
+        t.imprimirArbolito(t.raiz);
+
+        t.borrar(9);
+
+        System.out.println("\n-----------\n");
+        t.imprimirArbolito(t.raiz);
+
     }
-    /*public static void main(String args[]) {
-     ArbolAVL t = new ArbolAVL();
-     ArbolAVL.NodoAVL root = null;
-     while (true) {
-     System.out.println("(1) Insert");
-     System.out.println("(2) Delete");
-
-     try {
-     BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-     String s = bufferRead.readLine();
-
-     if (Integer.parseInt(s) == 1) {
-     System.out.print("Value to be inserted: ");
-     root = t.insertar(root, Integer.parseInt(bufferRead.readLine()));
-     } else if (Integer.parseInt(s) == 2) {
-     System.out.print("Value to be deleted: ");
-     root = t.borrarNodo(root, Integer.parseInt(bufferRead.readLine()));
-     } else {
-     System.out.println("Invalid choice, try again!");
-     continue;
-     }
-
-     t.imprimirArbolito(root);
-     System.out.println("\n\nCantidad: " + t.getCantidad());
-
-     } catch (IOException e) {
-     e.printStackTrace();
-     }
-     }
-     }*/
 }

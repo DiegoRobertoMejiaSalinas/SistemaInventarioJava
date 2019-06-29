@@ -1,6 +1,7 @@
 package pe.edu.unmsm.software.eapisw.structure;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         // -----------------------------------------------------------------
         // Atributos
         // -----------------------------------------------------------------
-        private NodoRojoNegro<T> derecho;
-        private NodoRojoNegro<T> izquierdo;
+        public NodoRojoNegro<T> derecha;
+        public NodoRojoNegro<T> izquierda;
         private T elem;
         private int color;
         private NodoRojoNegro<T> padre;
@@ -54,9 +55,9 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
                 return null;
             } else {
                 if (padre.padre.esHijoDerecho(padre)) {
-                    return padre.padre.izquierdo;
+                    return padre.padre.izquierda;
                 } else {
-                    return padre.padre.derecho;
+                    return padre.padre.derecha;
                 }
             }
 
@@ -67,44 +68,44 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         }
 
         public NodoRojoNegro<T> darHijoDerecho() {
-            return derecho;
+            return derecha;
         }
 
         public boolean esHijoDerecho(NodoRojoNegro<T> nodo) {
-            return derecho == nodo;
+            return derecha == nodo;
         }
 
         public NodoRojoNegro<T> darHijoIzquierdo() {
-            return izquierdo;
+            return izquierda;
         }
 
         public boolean esHijoIzquierdo(NodoRojoNegro<T> nodo) {
-            return izquierdo == nodo;
+            return izquierda == nodo;
         }
 
         public boolean hijoDerechoHoja() {
-            return derecho.elem == null;
+            return derecha.elem == null;
         }
 
         public boolean hijoIzquierdoHoja() {
-            return izquierdo.elem == null;
+            return izquierda.elem == null;
         }
 
         public NodoRojoNegro<T> darMayor() {
-            return hijoDerechoHoja() ? this : derecho.darMayor();
+            return hijoDerechoHoja() ? this : derecha.darMayor();
         }
 
         public NodoRojoNegro<T> darMenor() {
-            return hijoIzquierdoHoja() ? this : izquierdo.darMenor();
+            return hijoIzquierdoHoja() ? this : izquierda.darMenor();
         }
 
         public void darPreorden(List<T> preorden) {
             preorden.add(elem);
             if (!hijoIzquierdoHoja()) {
-                izquierdo.darPreorden(preorden);
+                izquierda.darPreorden(preorden);
             }
             if (!hijoDerechoHoja()) {
-                derecho.darPreorden(preorden);
+                derecha.darPreorden(preorden);
             }
         }
 
@@ -113,7 +114,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         }
 
         public int darPeso() {
-            return esHoja() ? 0 : 1 + derecho.darPeso() + izquierdo.darPeso();
+            return esHoja() ? 0 : 1 + derecha.darPeso() + izquierda.darPeso();
         }
 
         public void darHojas(List<NodoRojoNegro<T>> hojas) {
@@ -121,10 +122,10 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
                 hojas.add(this);
             } else {
                 if (!hijoDerechoHoja()) {
-                    derecho.darHojas(hojas);
+                    derecha.darHojas(hojas);
                 }
                 if (!hijoIzquierdoHoja()) {
-                    izquierdo.darHojas(hojas);
+                    izquierda.darHojas(hojas);
                 }
             }
         }
@@ -133,8 +134,8 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             if (esHoja()) {
                 return 0;
             }
-            int a1 = izquierdo.darAltura();
-            int a2 = derecho.darAltura();
+            int a1 = izquierda.darAltura();
+            int a2 = derecha.darAltura();
             return (a1 >= a2) ? a1 + 1 : a2 + 1;
         }
 
@@ -154,13 +155,13 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
                 return this;
             } else if (comp < 0) {
                 if (!hijoIzquierdoHoja()) {
-                    return izquierdo.darNodo(elem);
+                    return izquierda.darNodo(elem);
                 } else {
                     return null;
                 }
             } else {
                 if (!hijoDerechoHoja()) {
-                    return derecho.darNodo(elem);
+                    return derecha.darNodo(elem);
                 } else {
                     return null;
                 }
@@ -168,16 +169,24 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
         }
 
+        public T getDato() {
+            return elem;
+        }
+
+        public void setElem(T elem) {
+            this.elem = elem;
+        }
+
         public T darInfoNodo() {
             return elem;
         }
 
         public boolean hijoDerechoNegro() {
-            return derecho.color == NEGRO;
+            return derecha.color == NEGRO;
         }
 
         public boolean hijoIzquierdoNegro() {
-            return izquierdo.color == NEGRO;
+            return izquierda.color == NEGRO;
         }
 
         public boolean hijosNegros() {
@@ -188,7 +197,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             if (padre == null) {
                 return null;
             } else {
-                return padre.esHijoDerecho(this) ? padre.izquierdo : padre.derecho;
+                return padre.esHijoDerecho(this) ? padre.izquierda : padre.derecha;
             }
         }
 
@@ -207,14 +216,14 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             if (hijo != null) {
                 hijo.cambiarPadre(this);
             }
-            derecho = hijo;
+            derecha = hijo;
         }
 
         private void cambiarHijoIzquierdo(NodoRojoNegro<T> hijo) {
             if (hijo != null) {
                 hijo.cambiarPadre(this);
             }
-            izquierdo = hijo;
+            izquierda = hijo;
         }
 
         //Intercambia la información de un nodo con el ingresado
@@ -226,7 +235,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             } else {
                 elem = null;
                 color = NEGRO;
-                derecho = izquierdo = null;
+                derecha = izquierda = null;
             }
         }
 
@@ -235,7 +244,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             if (hijoDerechoHoja()) {
                 return this;
             } else {
-                NodoRojoNegro<T> hijoDerechoAux = derecho;
+                NodoRojoNegro<T> hijoDerechoAux = derecha;
                 cambiarHijoDerecho(hijoDerechoAux.darHijoIzquierdo());
                 hijoDerechoAux.cambiarPadre(padre);
                 hijoDerechoAux.cambiarHijoIzquierdo(this);
@@ -248,7 +257,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             if (hijoIzquierdoHoja()) {
                 return this;
             } else {
-                NodoRojoNegro<T> hijoIzquierdoAux = izquierdo;
+                NodoRojoNegro<T> hijoIzquierdoAux = izquierda;
                 cambiarHijoIzquierdo(hijoIzquierdoAux.darHijoDerecho());
                 hijoIzquierdoAux.cambiarPadre(padre);
                 hijoIzquierdoAux.cambiarHijoDerecho(this);
@@ -272,17 +281,17 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             if (elem.compareTo(nodo.darInfoNodo()) == 0) {
             } else if (elem.compareTo(nodo.darInfoNodo()) < 0) {
                 if (hijoDerechoHoja()) {
-                    derecho = nodo;
+                    derecha = nodo;
                     nodo.cambiarPadre(this);
                 } else {
-                    derecho.insertarNormal(nodo);
+                    derecha.insertarNormal(nodo);
                 }
             } else {
                 if (hijoIzquierdoHoja()) {
-                    izquierdo = nodo;
+                    izquierda = nodo;
                     nodo.cambiarPadre(this);
                 } else {
-                    izquierdo.insertarNormal(nodo);
+                    izquierda.insertarNormal(nodo);
                 }
             }
         }
@@ -329,7 +338,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         }
 
         //Cuarto caso de inserción.
-        //El nodo ingresado es hijo derecho, su padre es hijo izquierdo y ambos
+        //El nodo ingresado es hijo derecha, su padre es hijo izquierda y ambos
         //son rojos. El caso reflejado también se cubre.
         private void balanceoRojoNegroCaso4(Retorno r) {
             NodoRojoNegro<T> abuelo = padre.darPadre();
@@ -337,10 +346,10 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
             if (padre.esHijoDerecho(this) && abuelo.esHijoIzquierdo(padre)) {
                 abuelo.cambiarHijoIzquierdo(padre.rotarIzquierda());
-                izquierdo.balanceoRojoNegroCaso5(r);
+                izquierda.balanceoRojoNegroCaso5(r);
             } else if (padre.esHijoIzquierdo(this) && abuelo.esHijoDerecho(padre)) {
                 abuelo.cambiarHijoDerecho(padre.rotarDerecha());
-                derecho.balanceoRojoNegroCaso5(r);
+                derecha.balanceoRojoNegroCaso5(r);
             } else {
                 balanceoRojoNegroCaso5(r);
             }
@@ -382,7 +391,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         //Elimina el nodo como si se tratara de un ABB
         protected NodoRojoNegro<T> eliminar() {
             // Encontrar el mínimo de la derecha o el máximo de la izquierda
-            NodoRojoNegro<T> reemplazo = !hijoIzquierdoHoja() ? izquierdo.darMayor() : this.darMenor();
+            NodoRojoNegro<T> reemplazo = !hijoIzquierdoHoja() ? izquierda.darMayor() : this.darMenor();
 
             // Hacer el cambio de los elementos en this y en reemplazo
             cambiarElem(reemplazo);
@@ -397,15 +406,15 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
         //Cambia los hijos de un nodo por hojas
         private void eliminarHijos() {
-            derecho = new NodoRojoNegro<T>();
-            izquierdo = new NodoRojoNegro<T>();
+            derecha = new NodoRojoNegro<T>();
+            izquierda = new NodoRojoNegro<T>();
         }
 
         //Mantiene las propiedades del árbol cuando se va a eliminar un nodo.
         //Para este método se asume que el nodo a eliminar tiene maximo un hijo no hoja
         private void eliminarRojoNegro(Retorno r) {
             // Encuentra el hijo del nodo a eliminar. Este hijo es el unico hijo del bidi
-            NodoRojoNegro<T> hijo = !hijoDerechoHoja() ? derecho : izquierdo;
+            NodoRojoNegro<T> hijo = !hijoDerechoHoja() ? derecha : izquierda;
 
             int colorBorrar = darColor();
             int colorHijo = hijo.darColor();
@@ -500,8 +509,8 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             }
         }
 
-        //El nodo a eliminar es negro y es hijo izquierdo, su hermano es negro,
-        //su sobrino izquierdo es rojo y su sobrino derecho es negro. El caso
+        //El nodo a eliminar es negro y es hijo izquierda, su hermano es negro,
+        //su sobrino izquierda es rojo y su sobrino derecha es negro. El caso
         //reflejado también se cubre.
         private void eliminarCaso5(Retorno r) {
             // Por la estructura del árbol, este hermano nunca sera null
@@ -509,18 +518,18 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
             if (padre.esHijoIzquierdo(this) && hermano.color == NEGRO && !hermano.hijoIzquierdoNegro() && hermano.hijoDerechoNegro()) {
                 hermano.color = ROJO;
-                hermano.izquierdo.color = NEGRO;
+                hermano.izquierda.color = NEGRO;
                 padre.cambiarHijoDerecho(hermano.rotarDerecha());
             } else if (padre.esHijoDerecho(this) && hermano.color == NEGRO && !hermano.hijoDerechoNegro() && hermano.hijoIzquierdoNegro()) {
                 hermano.color = ROJO;
-                hermano.derecho.color = NEGRO;
+                hermano.derecha.color = NEGRO;
                 padre.cambiarHijoIzquierdo(hermano.rotarIzquierda());
             }
             eliminarCaso6(r);
         }
 
-        //El nodo a eliminar es negro y es hijo izquierdo, su hermano es negro
-        //y su sobrino derecho es rojo. El caso reflejado también se cubre.
+        //El nodo a eliminar es negro y es hijo izquierda, su hermano es negro
+        //y su sobrino derecha es rojo. El caso reflejado también se cubre.
         private void eliminarCaso6(Retorno r) {
             // Por la estructura del árbol, este hermano nunca sera null
             NodoRojoNegro<T> hermano = darHermano();
@@ -532,7 +541,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             r.respuesta = hermano;
 
             if (padre.esHijoIzquierdo(this)) {
-                hermano.derecho.color = NEGRO;
+                hermano.derecha.color = NEGRO;
 
                 if (abuelo != null) {
                     if (abuelo.esHijoDerecho(padre)) {
@@ -544,7 +553,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
                     padre.rotarIzquierda();
                 }
             } else {
-                hermano.izquierdo.color = NEGRO;
+                hermano.izquierda.color = NEGRO;
 
                 if (abuelo != null) {
                     if (abuelo.esHijoDerecho(padre)) {
@@ -634,6 +643,23 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         return preorden;
     }
 
+    ArrayList<T> arrayL = new ArrayList<>();
+
+    private void getArray(NodoRojoNegro<T> subarbol) {
+        if (subarbol != null) {
+            getArray(subarbol.izquierda);
+            if (subarbol.getDato() != null) { //ESTO ME HIZO SUFRIR
+                arrayL.add(subarbol.getDato());
+            }
+            getArray(subarbol.derecha);
+        }
+    }
+
+    public ArrayList getInOrden() {
+        getArray(raiz);
+        return arrayL;
+    }
+
     public boolean existe(T elem) {
         return raiz != null ? raiz.existe(elem) : false;
     }
@@ -653,7 +679,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         return raiz;
     }
 
-    public int darPeso() {
+    public int getNodos() {
         return raiz == null ? 0 : raiz.darPeso();
     }
 
@@ -667,5 +693,25 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
     public T darMayor() {
         return raiz == null ? null : raiz.darMayor().darInfoNodo();
+    }
+
+    public static void main(String[] args) throws Exception {
+        ArbolRojoNegro<Integer> arbol = new ArbolRojoNegro<>();
+
+        arbol.insertar(65);
+        arbol.insertar(456);
+        arbol.insertar(1);
+        arbol.insertar(213);
+        arbol.insertar(4);
+        arbol.insertar(789);
+        arbol.insertar(54);
+        arbol.insertar(21);
+        arbol.insertar(3);
+        arbol.insertar(4512);
+
+        System.out.println(arbol.getNodos());
+
+        ArrayList<Integer> arr = arbol.getInOrden();
+        System.out.println(arr.size());
     }
 }

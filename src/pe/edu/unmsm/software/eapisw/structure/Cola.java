@@ -24,57 +24,66 @@ public class Cola<T> implements Iterable<T> {
         
     }
 
-    private Nodo<T> cab;
-    private Nodo<T> ult;
+    private Nodo<T> cabecera;
+    private Nodo<T> ultimo;
     private Comparator<T> comparador;
+    private int longitud;
 
     public Nodo<T> getCab() {
-        return cab;
+        return cabecera;
     }
 
     public void setCab(Nodo<T> cab) {
-        this.cab = cab;
+        this.cabecera = cab;
     }
 
     public Nodo<T> getUlt() {
-        return ult;
+        return ultimo;
     }
 
     public void setUlt(Nodo<T> ult) {
-        this.ult = ult;
+        this.ultimo = ult;
     }
 
     public void encolar(T elementoNuevo) {
         Nodo<T> nuevo = new Nodo<>(elementoNuevo);
 
-        if (cab == null) {
-            cab = nuevo;
-            ult = nuevo;
+        if (cabecera == null) {
+            cabecera = nuevo;
+            ultimo = nuevo;
         } else {
-            Nodo<T> aux = cab;
+            Nodo<T> aux = cabecera;
             while (aux.sgte != null) {
                 aux = aux.sgte;
             }
             aux.sgte = nuevo;
-            ult = nuevo;
+            ultimo = nuevo;
         }
+        longitud++;
 
     }
 
     public T desencolar() {
 
-        T aux = cab.dato;
-        if (cab == null) {
+        T aux = cabecera.dato;
+        if (cabecera == null) {
 
         } else {
-            cab = cab.sgte;
+            cabecera = cabecera.sgte;
+            longitud--;
         }
         return aux;
 
     }
 
+    public int getLongitud() {
+        return longitud;
+    }
+    
+    
+
     public String mostrarElementos() {
-        Nodo<T> aux = cab;
+        Nodo<T> aux = cabecera;
         String represenCad = "";
         while (aux != null) {
             represenCad += aux.dato + ", ";
@@ -93,7 +102,7 @@ public class Cola<T> implements Iterable<T> {
 
     class IteradorCola implements Iterator<T> {
 
-        Nodo<T> aux = cab;
+        Nodo<T> aux = cabecera;
 
         @Override
         public boolean hasNext() {
@@ -115,7 +124,7 @@ public class Cola<T> implements Iterable<T> {
     }
     
     public void ordenarPorBurbuja() {
-        for (Nodo<T> i = cab; i != null; i = i.sgte) {
+        for (Nodo<T> i = cabecera; i != null; i = i.sgte) {
             for (Nodo<T> j = i; j != null; j = j.sgte) {
                 if (comparador.compare(i.dato, j.dato) > 0) {
                     //Intercambiar
@@ -133,7 +142,7 @@ public class Cola<T> implements Iterable<T> {
 
     @Override
     public String toString() {
-        return "Cola{" + "cabecera=" + cab + '}';
+        return "Cola{" + "cabecera=" + cabecera + '}';
     }
 
 }

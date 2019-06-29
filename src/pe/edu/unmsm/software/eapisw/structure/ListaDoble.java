@@ -9,8 +9,8 @@ public class ListaDoble<T> implements Iterable<T> {
 
     public class NodoDoble<T> {
 
-        private NodoDoble<T> sig;
-        private NodoDoble<T> ant;
+        private NodoDoble<T> siguiente;
+        private NodoDoble<T> anterior;
         private T dato;
 
         public NodoDoble(T dato) {
@@ -25,20 +25,20 @@ public class ListaDoble<T> implements Iterable<T> {
             this.dato = dato;
         }
 
-        public NodoDoble<T> getSig() {
-            return sig;
+        public NodoDoble<T> getSiguiente() {
+            return siguiente;
         }
 
-        public void setSig(NodoDoble<T> sig) {
-            this.sig = sig;
+        public void setSiguiente(NodoDoble<T> sig) {
+            this.siguiente = sig;
         }
 
-        public NodoDoble<T> getAnt() {
-            return ant;
+        public NodoDoble<T> getAnterior() {
+            return anterior;
         }
 
-        public void setAnt(NodoDoble<T> ant) {
-            this.ant = ant;
+        public void setAnterior(NodoDoble<T> ant) {
+            this.anterior = ant;
         }
 
     }
@@ -46,7 +46,7 @@ public class ListaDoble<T> implements Iterable<T> {
     private NodoDoble<T> cabecera;
     private NodoDoble<T> ultimo;
     private Comparator<T> comparador;
-    private int cant = 0;
+    private int longitud = 0;
 
     public NodoDoble<T> getCabecera() {
         return cabecera;
@@ -64,21 +64,22 @@ public class ListaDoble<T> implements Iterable<T> {
         this.ultimo = ultimo;
     }
 
-    public void insertarAlInicio(T nuevo) {
+    public void setFirst(T nuevo) {
         NodoDoble<T> nuevoNodo = new NodoDoble<>(nuevo);
-        nuevoNodo.sig = cabecera;
+        nuevoNodo.siguiente = cabecera;
 
         if (cabecera != null) {
-            cabecera.ant = nuevoNodo;
+            cabecera.anterior = nuevoNodo;
         } else {
             ultimo = nuevoNodo;
 
         }
         cabecera = nuevoNodo;
+        longitud++;
 
     }
 
-    public void insertarAlFinal(T nuevo) {
+    public void setLast(T nuevo) {
         NodoDoble<T> nuevoNodo = new NodoDoble<>(nuevo);
         NodoDoble<T> aux = cabecera;
 
@@ -86,19 +87,20 @@ public class ListaDoble<T> implements Iterable<T> {
             cabecera = nuevoNodo;
             ultimo = nuevoNodo;
         } else {
-            while (aux.sig != null) {
-                aux = aux.sig;
+            while (aux.siguiente != null) {
+                aux = aux.siguiente;
             }
 
-            aux.sig = nuevoNodo;
-            nuevoNodo.ant = aux;
-            nuevoNodo.sig = null;
+            aux.siguiente = nuevoNodo;
+            nuevoNodo.anterior = aux;
+            nuevoNodo.siguiente = null;
             ultimo = nuevoNodo;
         }
+        longitud++;
 
     }
 
-    public void eliminarPosicion(int pos) { // dato
+    public void remove(int pos) { // dato
 
         NodoDoble<T> aux = cabecera;
         int cont = 1;
@@ -106,15 +108,15 @@ public class ListaDoble<T> implements Iterable<T> {
         if (cabecera == null) {
             //
         } else {
-            if (pos > cant || pos == 1) {
+            if (pos > longitud || pos == 1) {
                 //
             } else {
 
                 while (cont != pos) {
-                    aux = aux.sig;
+                    aux = aux.siguiente;
                 }
-                aux.ant.sig = aux.sig;
-                aux.sig.ant = aux.ant;
+                aux.anterior.siguiente = aux.siguiente;
+                aux.siguiente.anterior = aux.anterior;
             }
         }
 
@@ -146,7 +148,7 @@ public class ListaDoble<T> implements Iterable<T> {
         @Override
         public T next() {
             T datoG = aux.dato;
-            aux = aux.sig;
+            aux = aux.siguiente;
             return datoG;
         }
 
@@ -172,7 +174,7 @@ public class ListaDoble<T> implements Iterable<T> {
         @Override
         public T next() {
             T datoG = aux.dato;
-            aux = aux.ant;
+            aux = aux.anterior;
             return datoG;
         }
 
@@ -184,11 +186,11 @@ public class ListaDoble<T> implements Iterable<T> {
     }
 
     private boolean isElementIndex(int index) {
-        return index >= 0 && index < cant;
+        return index >= 0 && index < longitud;
     }
 
     private String outOfBoundsMsg(int index) {
-        return "Index: " + index + ", Size: " + cant;
+        return "Index: " + index + ", Size: " + longitud;
     }
 
     private void checkElementIndex(int index) {
@@ -198,16 +200,16 @@ public class ListaDoble<T> implements Iterable<T> {
     }
 
     private NodoDoble<T> node(int index) {
-        if (index < (cant >> 1)) {
+        if (index < (longitud >> 1)) {
             NodoDoble<T> x = cabecera;
             for (int i = 0; i < index; i++) {
-                x = x.sig;
+                x = x.siguiente;
             }
             return x;
         } else {
             NodoDoble<T> x = ultimo;
-            for (int i = cant - 1; i > index; i--) {
-                x = x.ant;
+            for (int i = longitud - 1; i > index; i--) {
+                x = x.anterior;
             }
             return x;
         }
@@ -222,26 +224,90 @@ public class ListaDoble<T> implements Iterable<T> {
         return StreamSupport.stream(spliterator(), false);
     }
 
-    public int cantNodos() {
+    public int getLongitud() {
 
-        NodoDoble<T> nodo = cabecera;
-
-        while (nodo != null) {
-            cant++;
-            nodo = nodo.sig;
-        }
-
-        return cant;
+        return longitud;
     }
 
-    public void ordenarPorBurbuja() {
-        for (NodoDoble<T> i = cabecera; i != null; i = i.sig) {
-            for (NodoDoble<T> j = i; j != null; j = j.sig) {
+    /*public void ordenamientoBurbuja() {
+        for (NodoDoble<T> i = cabecera; i != null; i = i.siguiente) {
+            for (NodoDoble<T> j = i; j != null; j = j.siguiente) {
                 if (comparador.compare(i.dato, j.dato) > 0) {
                     //Intercambiar
                     intercambiar(i, j);
                 }
             }
+        }
+    }*/
+    
+    public void ordenamientoBurbuja(){
+        for (NodoDoble<T> i = getCabecera(); i != null; i = i.getSiguiente()) {
+            for (NodoDoble<T> j = i; j != null; j = j.getSiguiente()) {
+                if (comparador.compare(i.getDato(), j.getDato()) > 0) {
+                    intercambiar(i, j);
+                }
+            }
+        }
+    }
+
+    public void ordenamientoInsercion() {
+        int n = getLongitud();
+
+        for (int i = 1; i < n; i++) {
+            T key = node(i).getDato();
+            int j = i - 1;
+
+            while (j >= 0 && comparador.compare(node(j).getDato(), key) > 0) {
+                node(j + 1).setDato(node(j).getDato());
+                j = j - 1;
+            }
+            node(j + 1).setDato(key);
+        }
+    }
+
+    public void ordenamientoSeleccion() {
+        int n = getLongitud();
+
+        for (int i = 0; i < n - 1; i++) {
+            int min_idx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (comparador.compare(node(j).getDato(), node(min_idx).getDato()) < 0) {
+                    min_idx = j;
+                }
+            }
+            intercambiar(node(min_idx), node(i));
+
+        }
+    }
+
+    public void ordenamientoQuicksort(int izquierda, int derecha) {
+        T pivote = node(izquierda).getDato();
+
+        int i = izquierda;
+        int j = derecha;
+
+        while (i < j) {
+
+            while (comparador.compare(node(i).getDato(), pivote) <= 0 && i < j) {
+                i++;
+            }
+            while (comparador.compare(node(j).getDato(), pivote) > 0) {
+                j--;
+            }
+
+            if (i < j) {
+                intercambiar(node(i), node(j));
+            }
+        }
+
+        node(izquierda).setDato(node(j).getDato());
+        node(j).setDato(pivote);
+
+        if (izquierda < j - 1) {
+            ordenamientoQuicksort(izquierda, j - 1);
+        }
+        if (j + 1 < derecha) {
+            ordenamientoQuicksort(j + 1, derecha);
         }
     }
 
@@ -257,19 +323,22 @@ public class ListaDoble<T> implements Iterable<T> {
         String cont = "";
         while (aux != null) {
             cont += aux.getDato() + "\n";
-            aux = aux.getSig();
+            aux = aux.getSiguiente();
         }
         return cont;
     }
 
     public static void main(String[] args) {
         ListaDoble<Integer> lista = new ListaDoble<>();
-        lista.insertarAlFinal(5);
-        lista.insertarAlFinal(2);
-        lista.insertarAlFinal(54);
-        lista.insertarAlFinal(23);
-        lista.insertarAlFinal(1);
-        lista.insertarAlFinal(67);
+        lista.setLast(5);
+        lista.setLast(2);
+        lista.setLast(54);
+        lista.setLast(23);
+        lista.setLast(1);
+        lista.setLast(67);
+        System.out.println(lista);
+        System.out.println("Ordenamiento");
+        lista.ordenamientoBurbuja();
         System.out.println(lista);
     }
 

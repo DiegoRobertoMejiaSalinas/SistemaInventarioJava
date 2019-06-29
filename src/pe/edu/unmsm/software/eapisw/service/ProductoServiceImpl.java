@@ -23,11 +23,12 @@ public class ProductoServiceImpl {
     private String query = "";
 
     private ProductoDAOImpl dbProducto;
-    private ArrayList<Producto> arrayList;
-    private ArbolAVL<Producto> arbolAVL;
-    private ArbolBinario<Producto> arbolBinario;
-    private ArbolRojoNegro<Producto> arbolRojoNegro;
-    private Cola<Producto> cola;
+    public ArrayList<Producto> arrayList;
+    public ArbolAVL<Producto> arbolAVL;
+    public ArbolAVL.NodoAVL raiz;
+    public ArbolBinario<Producto> arbolBinario;
+    public ArbolRojoNegro<Producto> arbolRojoNegro;
+    public Cola<Producto> cola;
     public ListaDoble<Producto> listaDoble;
 
     public ProductoServiceImpl() {
@@ -55,25 +56,62 @@ public class ProductoServiceImpl {
         dtm = new DefaultTableModel(null, titulos);
         for (int i = 0; i < arrayList.size(); i++) {
             Producto prod = arrayList.get(i);
-            Object[] fila = new Object[]{prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
+            Object[] fila = new Object[]{i, prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
                 prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
             dtm.addRow(fila);
         }
+        System.out.println(arrayList.size());
         return dtm;
     }
 
     public DefaultTableModel mostrarListaDoble() {
         DefaultTableModel dtm;
-        int cantidad = this.listaDoble.cantNodos();
+        int cantidad = this.listaDoble.getLongitud();
         String[] titulos = {"Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
         dtm = new DefaultTableModel(null, titulos);
 
         for (int i = 0; i < cantidad; i++) {
             Producto prod = listaDoble.get(i);
-            Object[] fila = new Object[]{prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
+            Object[] fila = new Object[]{i, prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
                 prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
             dtm.addRow(fila);
         }
+        System.out.println(cantidad);
+        return dtm;
+    }
+
+    public DefaultTableModel mostrarCola() {
+        DefaultTableModel dtm;
+        int cantidad = this.cola.getLongitud();
+        String[] titulos = {"Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
+        dtm = new DefaultTableModel(null, titulos);
+
+        for (int i = 0; i < cantidad; i++) {
+
+            Producto prod = cola.desencolar();
+            Object[] fila = new Object[]{i, prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
+                prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
+            dtm.addRow(fila);
+        }
+        System.out.println(cantidad);
+        return dtm;
+    }
+
+    public DefaultTableModel mostrarArbolABB() {
+        DefaultTableModel dtm;
+        String[] titulos = {"Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
+        dtm = new DefaultTableModel(null, titulos);
+        System.out.println("Nodos de arbol binario: "+arbolBinario.getLongitud());
+        ArrayList<Producto> arrayL = arbolBinario.getInOrden();
+        System.out.println("Nodos en el array: "+arrayL.size());
+
+        for (int i = 0; i < arrayL.size(); i++) {
+            Producto prod = arrayL.get(i);
+            Object[] fila = new Object[]{i, prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
+                prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
+            dtm.addRow(fila);
+        }
+
         return dtm;
     }
 
@@ -81,19 +119,43 @@ public class ProductoServiceImpl {
         DefaultTableModel dtm;
         String[] titulos = {"Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
         dtm = new DefaultTableModel(null, titulos);
-        //arbolAVL.
-        /*for (int i = 0; i < arrayList.size(); i++) {
-         Producto prod = arrayList.get(i);
-         Object[] fila = new Object[]{prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
-         prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
-         dtm.addRow(fila);
-         }*/
+
+        ArrayList<Producto> arrayL = arbolAVL.getInOrden();
+        System.out.println("Array SIZE: "+arrayL.size());
+
+        for (int i = 0; i < arrayL.size(); i++) {
+            Producto prod = arrayL.get(i);
+            Object[] fila = new Object[]{i, prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
+                prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
+            dtm.addRow(fila);
+        }
+
+        return dtm;
+    }
+    
+    public DefaultTableModel mostrarArbolRN() {
+        DefaultTableModel dtm;
+        String[] titulos = {"Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
+        dtm = new DefaultTableModel(null, titulos);
+
+        System.out.println(arbolRojoNegro.getNodos());
+        ArrayList<Producto> arrayL = arbolRojoNegro.getInOrden();
+        System.out.println("Array SIZE: "+arrayL.size());
+
+        for (int i = 0; i < arrayL.size(); i++) {
+            Producto prod = arrayL.get(i);
+            Object[] fila = new Object[]{i, prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
+                prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
+            dtm.addRow(fila);
+        }
+
         return dtm;
     }
 
     public static void main(String[] args) {
         ProductoServiceImpl prod = new ProductoServiceImpl();
-        prod.mostrarListaDoble();
+        prod.mostrarArbolRN();
+        //prod.mostrarArbolABB();
     }
 
 }
