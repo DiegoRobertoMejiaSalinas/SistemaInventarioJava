@@ -1,7 +1,8 @@
 package pe.edu.unmsm.software.eapisw.model;
 
-public class Producto implements Comparable<Producto>{
+public class Producto implements Comparable<Producto> {
 
+    private int idProducto;
     private String codigo;
     private String nombre;
     private String descripcion;
@@ -19,6 +20,14 @@ public class Producto implements Comparable<Producto>{
     }
 
     public Producto() {
+    }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getCodigo() {
@@ -71,12 +80,22 @@ public class Producto implements Comparable<Producto>{
 
     @Override
     public String toString() {
-        return "Producto{" + "codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", caracteristicas=" + caracteristicas + ", stock=" + stock + ", precio_venta=" + precio_venta + '}';
+        return "Producto{" + "idProducto=" + idProducto + ", codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", caracteristicas=" + caracteristicas + ", stock=" + stock + ", precio_venta=" + precio_venta + '}';
     }
 
     @Override
     public int compareTo(Producto o) {
-        return this.codigo.compareTo(o.codigo);
+        if (this.idProducto > o.idProducto) {
+            return 1;
+        } else {
+            if (this.idProducto == o.idProducto) {
+                return 0;
+            } else {
+                return -1;
+           }
+        }
+
+        //return this.codigo.compareTo(o.codigo);
     }
 
 }

@@ -230,17 +230,16 @@ public class ListaDoble<T> implements Iterable<T> {
     }
 
     /*public void ordenamientoBurbuja() {
-        for (NodoDoble<T> i = cabecera; i != null; i = i.siguiente) {
-            for (NodoDoble<T> j = i; j != null; j = j.siguiente) {
-                if (comparador.compare(i.dato, j.dato) > 0) {
-                    //Intercambiar
-                    intercambiar(i, j);
-                }
-            }
-        }
-    }*/
-    
-    public void ordenamientoBurbuja(){
+     for (NodoDoble<T> i = cabecera; i != null; i = i.siguiente) {
+     for (NodoDoble<T> j = i; j != null; j = j.siguiente) {
+     if (comparador.compare(i.dato, j.dato) > 0) {
+     //Intercambiar
+     intercambiar(i, j);
+     }
+     }
+     }
+     }*/
+    public void ordenamientoBurbuja() {
         for (NodoDoble<T> i = getCabecera(); i != null; i = i.getSiguiente()) {
             for (NodoDoble<T> j = i; j != null; j = j.getSiguiente()) {
                 if (comparador.compare(i.getDato(), j.getDato()) > 0) {
@@ -297,6 +296,7 @@ public class ListaDoble<T> implements Iterable<T> {
 
             if (i < j) {
                 intercambiar(node(i), node(j));
+
             }
         }
 

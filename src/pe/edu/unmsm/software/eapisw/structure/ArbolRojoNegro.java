@@ -2,10 +2,14 @@ package pe.edu.unmsm.software.eapisw.structure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pe.edu.unmsm.software.eapisw.model.Producto;
 
-public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializable {
+public class ArbolRojoNegro<T extends Comparable<T>> {
 
     public class NodoRojoNegro<T extends Comparable<? super T>> implements Serializable {
         // -----------------------------------------------------------------
@@ -16,6 +20,16 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
         public static final int NEGRO = 1;
         public static final int ROJO = 0;
+
+        private Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
+
+        public Comparator<T> getComparador() {
+            return comparador;
+        }
+
+        public void setComparador(Comparator<T> comparador) {
+            this.comparador = comparador;
+        }
 
         // -----------------------------------------------------------------
         // Atributos
@@ -278,8 +292,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
 
         //Inserta un nuevo nodo   como si el árbol fuera un árbol binario ordenado.
         private void insertarNormal(NodoRojoNegro<T> nodo) throws Exception {
-            if (elem.compareTo(nodo.darInfoNodo()) == 0) {
-            } else if (elem.compareTo(nodo.darInfoNodo()) < 0) {
+            if (comparador.compare(elem, nodo.darInfoNodo()) < 0) { //elem.compareTo(nodo.darInfoNodo()) < 0
                 if (hijoDerechoHoja()) {
                     derecha = nodo;
                     nodo.cambiarPadre(this);
@@ -593,6 +606,7 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
     // Atributos
     // -----------------------------------------------------------------
     private NodoRojoNegro<T> raiz;
+    private Comparator<T> comparadorRN = (T o1, T o2) -> o1.compareTo(o2);
 
     // -----------------------------------------------------------------
     // Constructores
@@ -601,10 +615,18 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         raiz = null;
     }
 
+    ///////////////COMPARADORES
+    public Comparator<T> getComparador() {
+     return comparadorRN;
+     }
+
+     public void setComparador(Comparator<T> comparador) {
+     this.comparadorRN = comparador;
+     }
     // -----------------------------------------------------------------
     // Métodos
     // -----------------------------------------------------------------      
-    public void insertar(T elem) throws Exception {
+    public void insertar(T elem) {
         // Crear el nuevo nodo y agregarlo como si el arbol fuera un arbol
         // binario normal
         NodoRojoNegro<T> nodo = new NodoRojoNegro<T>(elem);
@@ -615,21 +637,29 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
             raiz = nodo;
             raiz.cambiarColor(NodoRojoNegro.NEGRO);
         } else {
-            r2 = raiz.insertar(nodo);
+            try {
+                r2 = raiz.insertar(nodo);
+            } catch (Exception ex) {
+                Logger.getLogger(ArbolRojoNegro.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         raiz = r2 != null && r2.darPadre() == null ? r2 : raiz;
     }
 
-    public void eliminar(T elem) throws Exception {
+    public void eliminar(T elem) {
         if (raiz != null) {
             //throw new ElementoNoExisteException( "El Ã¡rbol se encuentra vacio" );
             if (raiz.darInfoNodo().compareTo(elem) == 0 && raiz.hijoDerechoHoja() && raiz.hijoIzquierdoHoja()) {
                 raiz = null;
             } else {
-                if (raiz.darNodo(elem) != null) {
-                    NodoRojoNegro<T> r2 = raiz.darNodo(elem).eliminar();
-                    raiz = r2 != null && r2.darPadre() == null ? r2 : raiz;
+                try {
+                    if (raiz.darNodo(elem) != null) {
+                        NodoRojoNegro<T> r2 = raiz.darNodo(elem).eliminar();
+                        raiz = r2 != null && r2.darPadre() == null ? r2 : raiz;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ArbolRojoNegro.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -695,23 +725,28 @@ public class ArbolRojoNegro<T extends Comparable<? super T>> implements Serializ
         return raiz == null ? null : raiz.darMayor().darInfoNodo();
     }
 
-    public static void main(String[] args) throws Exception {
-        ArbolRojoNegro<Integer> arbol = new ArbolRojoNegro<>();
+    public static void main(String[] args) {
+        ArbolRojoNegro<Producto> arbol = new ArbolRojoNegro();
 
-        arbol.insertar(65);
-        arbol.insertar(456);
-        arbol.insertar(1);
-        arbol.insertar(213);
-        arbol.insertar(4);
-        arbol.insertar(789);
-        arbol.insertar(54);
-        arbol.insertar(21);
-        arbol.insertar(3);
-        arbol.insertar(4512);
+        Producto p1 = new Producto("112", "sa", null, null, 3213, 12);
+        Producto p2 = new Producto("24", "bm", null, null, 54, 10.2);
+        Producto p3 = new Producto("3", "cv", null, null, 2, 45);
+        Producto p4 = new Producto("4", "df", null, null, 3, 4);
+        Producto p5 = new Producto("5", "z", null, null, 10, 42.54);
+        Producto p6 = new Producto("6", "zxc", null, null, 1, 415.2);
+        Producto p7 = new Producto("7", "cx", null, null, 9, 15.9);
+
+        arbol.insertar(p1);
+        arbol.insertar(p2);
+        arbol.insertar(p3);
+        arbol.insertar(p4);
+        arbol.insertar(p5);
+        arbol.insertar(p6);
+        arbol.insertar(p7);
 
         System.out.println(arbol.getNodos());
-
-        ArrayList<Integer> arr = arbol.getInOrden();
-        System.out.println(arr.size());
+        //ArrayList<Producto> array= arbol.getInOrden();
+        //System.out.println(array);
     }
+
 }

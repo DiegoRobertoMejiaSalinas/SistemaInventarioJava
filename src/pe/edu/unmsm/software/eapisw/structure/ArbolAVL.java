@@ -6,10 +6,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import pe.edu.unmsm.software.eapisw.model.Producto;
 
 public class ArbolAVL<T extends Comparable<T>> {
 
-    private final Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
+    private Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
     private int cantidad = 0;
     private NodoAVL<T> raiz;
 
@@ -72,6 +73,15 @@ public class ArbolAVL<T extends Comparable<T>> {
         return subarbol.altura;
     }
 
+    ///////////////COMPARADORES
+    public Comparator<T> getComparador() {
+        return comparador;
+    }
+
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
+    }
+
     //public NodoAVL<T> insertar(T valor){
     public void insertar(T valor) {
 
@@ -90,7 +100,7 @@ public class ArbolAVL<T extends Comparable<T>> {
         if (comparador.compare(valor, nodo.dato) < 0) { //valor < nodo.dato
             nodo.izquierda = insertarRecursivo(nodo.izquierda, valor);
 
-        } else if (comparador.compare(valor, nodo.dato) > 0) {
+        } else {
             nodo.derecha = insertarRecursivo(nodo.derecha, valor);
         }
 
@@ -168,7 +178,7 @@ public class ArbolAVL<T extends Comparable<T>> {
         if (root != null) {
             preOrden(root.izquierda);
             //System.out.printf("%d ", root.dato);
-            //System.out.println(root.getDato());
+            System.out.println(root.getDato());
             preOrden(root.derecha);
         }
     }
@@ -307,112 +317,27 @@ public class ArbolAVL<T extends Comparable<T>> {
         getArray(raiz);
         return arrayL;
     }
-
-    public void imprimirArbolito(NodoAVL root) {
-
-        if (root == null) {
-            System.out.println("(XXXXXX)");
-            return;
-        }
-
-        int height = root.altura,
-                width = (int) Math.pow(2, height - 1);
-
-        // Preparing variables for loop.
-        List<NodoAVL> current = new ArrayList<NodoAVL>(1);
-        List<NodoAVL> next = new ArrayList<NodoAVL>(2);
-        current.add(root);
-
-        final int maxHalfLength = 4;
-        int elements = 1;
-
-        StringBuilder sb = new StringBuilder(maxHalfLength * width);
-        for (int i = 0; i < maxHalfLength * width; i++) {
-            sb.append(' ');
-        }
-        String textBuffer;
-
-        // Iterating through height levels.
-        for (int i = 0; i < height; i++) {
-
-            sb.setLength(maxHalfLength * ((int) Math.pow(2, height - 1 - i) - 1));
-
-            // Creating spacer space indicator.
-            textBuffer = sb.toString();
-
-            // Print tree node elements
-            for (NodoAVL n : current) {
-
-                System.out.print(textBuffer);
-
-                if (n == null) {
-
-                    System.out.print("        ");
-                    next.add(null);
-                    next.add(null);
-
-                } else {
-
-                    System.out.printf("(%6d)", n.dato);
-                    next.add(n.izquierda);
-                    next.add(n.derecha);
-
-                }
-
-                System.out.print(textBuffer);
-
-            }
-
-            System.out.println();
-            // Print tree node extensions for next level.
-            if (i < height - 1) {
-
-                for (NodoAVL n : current) {
-
-                    System.out.print(textBuffer);
-
-                    if (n == null) {
-                        System.out.print("        ");
-                    } else {
-                        System.out.printf("%s      %s",
-                                n.izquierda == null ? " " : "/", n.derecha == null ? " " : "\\");
-                    }
-
-                    System.out.print(textBuffer);
-
-                }
-
-                System.out.println();
-
-            }
-
-            // Renewing indicators for next run.
-            elements *= 2;
-            current = next;
-            next = new ArrayList<NodoAVL>(elements);
-
-        }
-
-    }
-
+    
     public static void main(String[] args) {
-        ArbolAVL t = new ArbolAVL();
-
-        ArbolAVL.NodoAVL root = null;
-
-        /*root= t.insertarRecursivo(root, 6);
-         root= t.insertarRecursivo(root,7);
-         root= t.insertarRecursivo(root,8);*/
-        t.insertar(6);
-        t.insertar(9);
-        t.insertar(12);
-
-        t.imprimirArbolito(t.raiz);
-
-        t.borrar(9);
-
-        System.out.println("\n-----------\n");
-        t.imprimirArbolito(t.raiz);
-
+        ArbolAVL<Producto> arbol= new ArbolAVL();
+        
+        arbol.insertar(new Producto("112", "sa", null, null, 3213, 12));
+        arbol.insertar(new Producto("24", "bm", null, null, 54, 10.2));
+        arbol.insertar(new Producto("3", "cv", null, null, 2, 45));
+        arbol.insertar(new Producto("4", "df", null, null, 3, 4));
+        arbol.insertar(new Producto("5", "z", null, null, 10, 42.54));
+        arbol.insertar(new Producto("6", "zxc", null, null, 1, 415.2));
+        arbol.insertar(new Producto("7", "cx", null, null, 9, 15.9));
+        arbol.insertar(new Producto("8", "bv", null, null, 6, 12.2));
+        arbol.insertar(new Producto("9", "uyi", null, null, 356, 1.3));
+        arbol.insertar(new Producto("12", "ty", null, null, 454, 9));
+        arbol.insertar(new Producto("134", "iuiu", null, null, 39, 4.65));
+        
+        System.out.println(arbol.getCantidad());
+        
+        ArrayList<Producto> array= arbol.getInOrden();
+        
+        //System.out.println(array);
     }
+
 }

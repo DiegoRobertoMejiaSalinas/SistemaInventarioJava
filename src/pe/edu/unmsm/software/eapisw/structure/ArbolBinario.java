@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JOptionPane;
 import pe.edu.unmsm.software.eapisw.model.Producto;
 
 public class ArbolBinario<T extends Comparable<T>> {
@@ -25,15 +26,22 @@ public class ArbolBinario<T extends Comparable<T>> {
         public void setDato(T dato) {
             this.dato = dato;
         }
-
     }
-
     private NodoBinario<T> raiz;
     private int longitud;
     //COMPARADOR
-    private final Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
+    private Comparator<T> comparador = (T o1, T o2) -> o1.compareTo(o2);
 
-    public void insertar(T dato) {
+    ///////////////COMPARADORES
+    public Comparator<T> getComparador() {
+        return comparador;
+    }
+
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
+    }
+
+    public void insert(T dato) {
         NodoBinario<T> nuevo = new NodoBinario<>(dato);
         insertarRecursivo(nuevo, raiz);
     }
@@ -56,6 +64,7 @@ public class ArbolBinario<T extends Comparable<T>> {
                 }
             } else {
                 if (comparador.compare(nuevo.dato, aux.dato) == 0) {
+                    //System.out.println("Se repite");
                     return false;
                 } else {
                     if (aux.derecha == null) {
@@ -70,7 +79,43 @@ public class ArbolBinario<T extends Comparable<T>> {
         return true;
     }
 
+    public void insertar(T valor) {
+        if (raiz == null) {
+            raiz = new NodoBinario<>(valor);
+            return ;
+        } else {
+            NodoBinario<T> actual = raiz;
+
+            while (true) {
+                //System.out.println(raiz.dato);
+                //System.out.println(valor.compareTo(actual.dato));
+                //return ;
+                if (valor.compareTo(actual.dato) > 0) {
+                    if (actual.derecha != null) {
+                        actual = actual.derecha;
+                    } else {
+                        actual.derecha = new NodoBinario(valor);
+                        longitud++;
+                        return ;
+                    }
+                } else if (valor.compareTo(actual.dato) < 0) {
+                    if (actual.izquierda != null) {
+                        actual = actual.izquierda;
+                    } else {
+                        actual.izquierda = new NodoBinario(valor);
+                        longitud++;
+                        return ;
+                    }
+                } else {
+                    //System.out.println("g");
+                    return ;
+                }
+            }
+        }
+    }
+
     //Buscar dato
+
     public NodoBinario<T> buscar(T dato) {
         NodoBinario<T> aux = raiz;
         while (comparador.compare(aux.getDato(), dato) != 0) {
@@ -216,7 +261,9 @@ public class ArbolBinario<T extends Comparable<T>> {
     private void getArray(NodoBinario<T> subarbol) {
         if (subarbol != null) {
             getArray(subarbol.izquierda);
-            arrayL.add(subarbol.getDato());
+            if (subarbol.getDato() != null) {
+                arrayL.add(subarbol.getDato());
+            }
             getArray(subarbol.derecha);
         }
     }
@@ -224,33 +271,5 @@ public class ArbolBinario<T extends Comparable<T>> {
     public ArrayList getInOrden() {
         getArray(raiz);
         return arrayL;
-    }
-
-    public static void main(String[] args) {
-        ArbolBinario<Producto> arbol = new ArbolBinario<>();
-        Producto pA = new Producto("aaytr", "Gsdaa", "65", "8787", 5, 98);
-        Producto pB = new Producto("rytytrtty", "Gauyta", "65", "8787", 5, 98);
-        Producto pC = new Producto("ztyuasd", "Gatga", "65", "8787", 5, 98);
-        Producto pD = new Producto("dfas", "Gafga", "65", "8787", 5, 98);
-        Producto pE = new Producto("vcxc", "Gsdaa", "65", "8787", 5, 98);
-        arbol.insertar(pA);
-        arbol.insertar(pB);
-        arbol.insertar(pC);
-        arbol.insertar(pD);
-        arbol.insertar(pE);
-        arbol.insertar(new Producto("tyutyu", "Gsdaa", "65", "8787", 5, 98));
-        arbol.insertar(new Producto("fddfdd", "Gsdaa", "65", "8787", 5, 98));
-        arbol.insertar(new Producto("paaaa", "Gsdaa", "65", "8787", 5, 98));
-        arbol.insertar(new Producto("gaaaaa", "Gsdaa", "65", "8787", 5, 98));
-        arbol.insertar(new Producto("juaasasjuas", "Gsdaa", "65", "8787", 5, 98));
-
-        arbol.inOrden();
-
-        System.out.println("\n--------------------------\n");
-
-        //System.out.println(arbol.buscar(pC).dato);
-        //arbol.inOrden();
-        //ArrayList<Producto> arr = arbol.getInOrdenRecursivo(arbol.raiz);
-        //System.out.println(arr);
     }
 }

@@ -10,6 +10,11 @@ import javax.swing.JOptionPane;
 import pe.edu.unmsm.software.eapisw.dao.AccesoDB;
 import pe.edu.unmsm.software.eapisw.dao.InterfaceDAO;
 import pe.edu.unmsm.software.eapisw.model.Producto;
+import pe.edu.unmsm.software.eapisw.service.ProductoService.ProductoComparatorCodigo;
+import pe.edu.unmsm.software.eapisw.service.ProductoService.ProductoComparatorID;
+import pe.edu.unmsm.software.eapisw.service.ProductoService.ProductoComparatorNombre;
+import pe.edu.unmsm.software.eapisw.service.ProductoService.ProductoComparatorPrecioVenta;
+import pe.edu.unmsm.software.eapisw.service.ProductoService.ProductoComparatorStock;
 import pe.edu.unmsm.software.eapisw.structure.ArbolAVL;
 import pe.edu.unmsm.software.eapisw.structure.ArbolBinario;
 import pe.edu.unmsm.software.eapisw.structure.ArbolRojoNegro;
@@ -31,6 +36,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
     ArbolAVL.NodoAVL raiz;
     ArbolBinario<Producto> arbolABB;
     ArbolRojoNegro<Producto> arbolRN;
+    ArbolRojoNegro.NodoRojoNegro raizRN;
     Cola<Producto> cola;
     ListaDoble<Producto> listaDoble;
 
@@ -48,8 +54,30 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
     @Override
     public boolean create(Producto producto) {
         boolean resultado = true;
+        String query = "INSERT INTO PRODUCTO (codigo, nombre, descripcion, caracteristicas, stock, precio_venta)"
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
+            //Obtener conexion con la BD
             conexion = acceso.getConexion();
+
+            //Preparamos la consulta a ejecutar
+            ps = conexion.prepareStatement(query);
+
+            ps.setString(1, producto.getCodigo());
+            ps.setString(2, producto.getNombre());
+            ps.setString(3, producto.getDescripcion());
+            ps.setString(4, producto.getCaracteristicas());
+            ps.setInt(5, producto.getStock());
+            ps.setDouble(6, producto.getPrecio_venta());
+
+            int n = ps.executeUpdate();
+
+            if (n != 0) {
+                JOptionPane.showMessageDialog(null, "Producto creado con éxito.");
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "No se pudo crear el producto, intentelo nuevamente.");
         }
@@ -58,30 +86,78 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
     }
 
     @Override
-    public boolean update(Producto e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(Producto producto) {
+        String query = "UPDATE PRODUCTO SET codigo=?, nombre=?, descripcion= ?, caracteristicas= ?, stock= ?, precio_venta= ? "
+                + "WHERE idproducto= ?";
+
+        try {
+            //Obtener conexion con la BD
+            conexion = acceso.getConexion();
+
+            //Preparamos la consulta a ejecutar
+            ps = conexion.prepareStatement(query);
+            ps.setString(1, producto.getCodigo());
+            ps.setString(2, producto.getNombre());
+            ps.setString(3, producto.getDescripcion());
+            ps.setString(4, producto.getCaracteristicas());
+            ps.setInt(5, producto.getStock());
+            ps.setDouble(6, producto.getPrecio_venta());
+            ps.setInt(7, producto.getIdProducto());
+
+            int n = ps.executeUpdate();
+
+            if (n != 0) {
+                JOptionPane.showMessageDialog(null, "Producto editado con éxito.");
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No se pudo editar el producto, intentelo nuevamente.");
+        }
+
+        return false;
     }
 
     @Override
     public Producto read(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     public Producto readArbolABB(String id) {
         return null;
     }
-    
-    public Producto readArbolAVL(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public Producto readArbolRN(String id){
+
+    /*public Producto readArbolAVL(String id) {
+     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     }*/
+    public Producto readArbolRN(String id) {
         return null;
     }
 
     @Override
     public boolean delete(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "DELETE from Producto WHERE codigo='" + codigo + "'";
+        try {
+            //Obtener conexion con la BD
+            conexion = acceso.getConexion();
+
+            //Preparamos la consulta a ejecutar
+            ps = conexion.prepareStatement(query);
+
+            int n = ps.executeUpdate();
+            if (n != 0) {
+                JOptionPane.showMessageDialog(null, "Producto eliminado con éxito.");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar el producto, intentelo nuevamente.");
+        }
+
+        return false;
     }
 
     @Override
@@ -97,6 +173,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
 
             while (rs.next()) {
                 Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt(1));
                 producto.setCodigo(rs.getString(2));
                 producto.setNombre(rs.getString(3));
                 producto.setDescripcion(rs.getString(4));
@@ -115,35 +192,8 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
         return arrayList;
     }
 
-    public ArbolAVL readArbolAVL() {
-        String query = "Select * from Producto";
-
-        try {
-            //Obtener la conexion a la BD
-            conexion = acceso.getConexion();
-            //Preparamos la consulta a ejecutar
-            ps = conexion.prepareStatement(query);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Producto producto = new Producto();
-                producto.setCodigo(rs.getString(2));
-                producto.setNombre(rs.getString(3));
-                producto.setDescripcion(rs.getString(4));
-                producto.setCaracteristicas(rs.getString(5));
-                producto.setStock(rs.getInt(6));
-                producto.setPrecio_venta(rs.getDouble(7));
-
-                arbolAVL.insertar(producto);
-            }
-
-        } catch (SQLException e) {
-            arbolAVL = null;
-        }
-        return arbolAVL;
-    }
-
     public ArbolBinario readArbolABB() {
+
         String query = "Select * from Producto";
         try {
             //Obtener la conexion a la BD
@@ -154,6 +204,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
 
             while (rs.next()) {
                 Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt(1));
                 producto.setCodigo(rs.getString(2));
                 producto.setNombre(rs.getString(3));
                 producto.setDescripcion(rs.getString(4));
@@ -170,8 +221,26 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
         return arbolABB;
     }
 
-    public ArbolRojoNegro readArbolRojoNegro() throws Exception {
+    public ArbolAVL readArbolAVL(String com) {
+        if (com.equalsIgnoreCase("precio")) {
+            ProductoComparatorPrecioVenta cpm = new ProductoComparatorPrecioVenta();
+            arbolAVL.setComparador(cpm);
+        } else if (com.equalsIgnoreCase("codigo")) {
+            ProductoComparatorCodigo cpm = new ProductoComparatorCodigo();
+            arbolAVL.setComparador(cpm);
+        } else if (com.equalsIgnoreCase("nombre")) {
+            ProductoComparatorNombre cpm = new ProductoComparatorNombre();
+            arbolAVL.setComparador(cpm);
+        } else if (com.equalsIgnoreCase("stock")) {
+            ProductoComparatorStock cpm = new ProductoComparatorStock();
+            arbolAVL.setComparador(cpm);
+        } else {
+            ProductoComparatorID cpm = new ProductoComparatorID();
+            arbolAVL.setComparador(cpm);
+        }
+
         String query = "Select * from Producto";
+
         try {
             //Obtener la conexion a la BD
             conexion = acceso.getConexion();
@@ -181,6 +250,37 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
 
             while (rs.next()) {
                 Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt(1));
+                producto.setCodigo(rs.getString(2));
+                producto.setNombre(rs.getString(3));
+                producto.setDescripcion(rs.getString(4));
+                producto.setCaracteristicas(rs.getString(5));
+                producto.setStock(rs.getInt(6));
+                producto.setPrecio_venta(rs.getDouble(7));
+
+                arbolAVL.insertar(producto);
+            }
+
+        } catch (SQLException e) {
+            arbolAVL = null;
+        }
+        return arbolAVL;
+    }
+
+    public ArbolRojoNegro readArbolRojoNegro(String com) {
+
+        String query = "Select * from Producto";
+
+        try {
+            //Obtener la conexion a la BD
+            conexion = acceso.getConexion();
+            //Preparamos la consulta a ejecutar
+            ps = conexion.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt(1));
                 producto.setCodigo(rs.getString(2));
                 producto.setNombre(rs.getString(3));
                 producto.setDescripcion(rs.getString(4));
@@ -190,6 +290,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
 
                 arbolRN.insertar(producto);
             }
+
         } catch (SQLException e) {
             arbolRN = null;
         }
@@ -208,6 +309,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
 
             while (rs.next()) {
                 Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt(1));
                 producto.setCodigo(rs.getString(2));
                 producto.setNombre(rs.getString(3));
                 producto.setDescripcion(rs.getString(4));
@@ -235,6 +337,7 @@ public class ProductoDAOImpl implements InterfaceDAO<Producto, String> {
 
             while (rs.next()) {
                 Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt(1));
                 producto.setCodigo(rs.getString(2));
                 producto.setNombre(rs.getString(3));
                 producto.setDescripcion(rs.getString(4));
