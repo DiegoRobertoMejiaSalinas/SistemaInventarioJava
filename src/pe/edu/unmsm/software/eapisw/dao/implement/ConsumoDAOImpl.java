@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import pe.edu.unmsm.software.eapisw.dao.AccesoDB;
 import pe.edu.unmsm.software.eapisw.dao.InterfaceDAO;
 import pe.edu.unmsm.software.eapisw.model.Consumo;
+import pe.edu.unmsm.software.eapisw.structure.ArbolRojoNegro;
 
 public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
 
@@ -42,6 +43,7 @@ public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
 
             ps.setInt(1, consumo.getIdVenta());
             ps.setInt(2, consumo.getIdProducto());
+            System.out.println("IDProducto: "+consumo.getIdProducto());
             ps.setInt(3, consumo.getCantidad());
             ps.setDouble(4, consumo.getPrecioVenta());
 
@@ -54,6 +56,7 @@ public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             JOptionPane.showMessageDialog(null, "No se pudo registrar el consumo, intentelo nuevamente.");
         }
 
@@ -88,15 +91,19 @@ public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
             }
 
         } catch (Exception e) {
+            
             JOptionPane.showMessageDialog(null, "No se pudo editar el consumo, intentelo nuevamente.");
         }
 
         return false;
     }
 
-    @Override
-    public ArrayList read() {
-        String query = "SELECT * FROM consumo";
+    public ArbolRojoNegro readArbolRojoNegro(String buscar) {
+        ArbolRojoNegro<Consumo> arbolRN= new ArbolRojoNegro<Consumo>();
+        
+        String query = "SELECT c.idconsumo, c.idventa, c.idproducto, c.cantidad, "
+                + "c.precio_venta from consumo c inner join producto p on c.idproducto=p.idproducto "
+                + "where c.idventa = "+buscar;
 
         try {
             //Obtener la conexion a la BD
@@ -113,17 +120,20 @@ public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
                 consumo.setIdProducto(rs.getInt(3));
                 consumo.setCantidad(rs.getInt(4));
                 consumo.setPrecioVenta(rs.getDouble(5));
+                
+                totalConsumo+= (rs.getInt(4) * rs.getDouble(5));
+                System.out.println(consumo);
 
-                arrayList.add(consumo);
+                arbolRN.insertar(consumo);
             }
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "No se pudo llamar al consumo");
             System.out.println(e);
-            arrayList = null;
+            arbolRN = null;
         }
 
-        return arrayList;
+        return arbolRN;
     }
 
     ArrayList<String[]> array = new ArrayList<>();
@@ -165,11 +175,43 @@ public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
 
         return array;
     }
+    
+    public ArrayList readTablita(int buscar) {
+        String query = "SELECT c.idconsumo, c.idventa, c.idproducto, p.nombre, c.cantidad, "
+                + "c.precio_venta "
+                + "FROM consumo c inner join producto p on c.idproducto= p.idproducto "
+                + "WHERE c.idventa= " + buscar + "";
 
-    @Override
-    public Consumo read(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String[] registro = new String[12];
+
+        try {
+            //Obtener la conexion a la BD
+            conexion = acceso.getConexion();
+
+            //Preparamos la consulta a ejecutar
+            ps = conexion.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                
+                registro[0] = rs.getString("nombre");
+                registro[1] = rs.getString("cantidad");
+                registro[2] = rs.getString("precio_venta");
+
+                totalConsumo += (rs.getInt("cantidad") * rs.getDouble("precio_venta"));
+
+                array.add(registro);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No se pudo llamar al consumo");
+            System.out.println(e);
+            array = null;
+        }
+
+        return array;
     }
+
 
     @Override
     public boolean delete(String codigo) {
@@ -200,6 +242,16 @@ public class ConsumoDAOImpl implements InterfaceDAO<Consumo, String> {
         }
 
         return false;
+    }
+
+    @Override
+    public ArrayList read() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Consumo read(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

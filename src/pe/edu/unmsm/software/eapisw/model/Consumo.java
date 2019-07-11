@@ -1,6 +1,6 @@
 package pe.edu.unmsm.software.eapisw.model;
 
-public class Consumo {
+public class Consumo implements Comparable<Consumo> {
 
     private int idConsumo;
     private int idVenta;
@@ -57,6 +57,22 @@ public class Consumo {
 
     public void setPrecioVenta(Double precioVenta) {
         this.precioVenta = precioVenta;
+    }
+
+    @Override
+    public String toString() {
+        return "Consumo{" + "idConsumo=" + idConsumo + ", idVenta=" + idVenta + ", idProducto=" + idProducto + ", cantidad=" + cantidad + ", precioVenta=" + precioVenta + '}';
+    }
+
+    @Override
+    public int compareTo(Consumo o) {
+        if (this.idConsumo > o.idConsumo) {
+            return 1;
+        } else if (this.idConsumo == o.idConsumo) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 
 }

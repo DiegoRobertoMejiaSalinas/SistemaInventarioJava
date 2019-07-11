@@ -8,6 +8,8 @@ package pe.edu.unmsm.software.eapisw.controller;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pe.edu.unmsm.software.eapisw.model.Trabajador;
+import pe.edu.unmsm.software.eapisw.service.TrabajadorService.TrabajadorComparatorAPaterno;
+import pe.edu.unmsm.software.eapisw.service.TrabajadorService.TrabajadorComparatorID;
 import pe.edu.unmsm.software.eapisw.service.TrabajadorServiceImpl;
 
 /**
@@ -23,6 +25,13 @@ public class TrabajadorLista extends javax.swing.JInternalFrame {
         initComponents();
         this.setResizable(false);
         mostrarTabla();
+        
+        grupo.add(radioAp);
+        grupo.add(radioDoc);
+        grupo.add(radioID);
+        grupo.add(radioNom);
+        
+        radioID.setSelected(true);
     }
 
     /**
@@ -34,16 +43,23 @@ public class TrabajadorLista extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        grupo = new javax.swing.ButtonGroup();
+        btnEditar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
+        btnOrdenar = new javax.swing.JButton();
+        radioID = new javax.swing.JRadioButton();
+        radioDoc = new javax.swing.JRadioButton();
+        radioNom = new javax.swing.JRadioButton();
+        radioAp = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
 
@@ -58,33 +74,91 @@ public class TrabajadorLista extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(Tabla);
 
+        btnOrdenar.setText("Ordenar");
+        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdenarActionPerformed(evt);
+            }
+        });
+
+        radioID.setText("ID");
+
+        radioDoc.setText("Numero de Documento");
+
+        radioNom.setText("Nombre");
+
+        radioAp.setText("Apellido Paterno");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        jLabel1.setText("Arbol AVL");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1036, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1036, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnEditar)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(118, 118, 118)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(radioID)
+                                    .addComponent(radioDoc))
+                                .addGap(83, 83, 83)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(radioNom)
+                                    .addComponent(radioAp)))
+                            .addComponent(btnOrdenar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 5, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(radioID)
+                            .addComponent(radioNom))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(btnOrdenar)
+                                .addGap(29, 29, 29))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioDoc)
+                                .addGap(17, 17, 17))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(radioAp)
+                                .addGap(17, 17, 17))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addContainerGap())))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         try {
             int seleccionado = Tabla.getSelectedRow();
 
@@ -122,7 +196,32 @@ public class TrabajadorLista extends javax.swing.JInternalFrame {
         } catch (ArrayIndexOutOfBoundsException e) {
             JOptionPane.showMessageDialog(null, "Primero seleccione un trabajador.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
+        
+        TrabajadorServiceImpl trab= new TrabajadorServiceImpl();
+        DefaultTableModel modelo;
+        if(radioID.isSelected()){
+           
+            modelo= trab.ordenarArbolAVL("id");
+            Tabla.setModel(modelo);
+        }
+        else if(radioAp.isSelected()){
+            
+            modelo= trab.ordenarArbolAVL("apaterno");
+            Tabla.setModel(modelo);
+        }
+        else if(radioDoc.isSelected()){
+           
+            modelo= trab.ordenarArbolAVL("");
+            Tabla.setModel(modelo);
+        }else{
+           
+            modelo= trab.ordenarArbolAVL("nombre");
+            Tabla.setModel(modelo);
+        }
+    }//GEN-LAST:event_btnOrdenarActionPerformed
 
     void darFormaTabla() {
         Tabla.getColumnModel().getColumn(0).setMinWidth(20);
@@ -145,12 +244,19 @@ public class TrabajadorLista extends javax.swing.JInternalFrame {
         TrabajadorServiceImpl trabajadorService = new TrabajadorServiceImpl();
         DefaultTableModel modelo = trabajadorService.mostrarArbolAVL();
         Tabla.setModel(modelo);
-        darFormaTabla();
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnOrdenar;
+    private javax.swing.ButtonGroup grupo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton radioAp;
+    private javax.swing.JRadioButton radioDoc;
+    private javax.swing.JRadioButton radioID;
+    private javax.swing.JRadioButton radioNom;
     // End of variables declaration//GEN-END:variables
 }

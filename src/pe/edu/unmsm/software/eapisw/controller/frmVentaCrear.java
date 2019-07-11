@@ -5,7 +5,12 @@
  */
 package pe.edu.unmsm.software.eapisw.controller;
 
+import javax.swing.JOptionPane;
 import pe.edu.unmsm.software.eapisw.controller.frmClienteCrear;
+import pe.edu.unmsm.software.eapisw.dao.implement.ConsumoDAOImpl;
+import pe.edu.unmsm.software.eapisw.dao.implement.VentaDAOImpl;
+import pe.edu.unmsm.software.eapisw.model.Consumo;
+import pe.edu.unmsm.software.eapisw.model.Venta;
 
 /**
  *
@@ -13,13 +18,35 @@ import pe.edu.unmsm.software.eapisw.controller.frmClienteCrear;
  */
 public class frmVentaCrear extends javax.swing.JFrame {
 
-    /**
-     * Creates new form frmVentaCrear
-     */
-    public frmVentaCrear() {
+    public static int idVenta;
+    public static int idCliente;
+    public static int idTrabajador;
+    public static String nombreTrabajador;
+
+    public frmVentaCrear(int idV, int id, String nombre) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+
+        idVenta = idV;
+        idTrabajador = id;
+        nombreTrabajador = nombre;
+
+        txtTrabajador.setText(nombreTrabajador);
+
+        btnConsumo.setEnabled(false);
+    }
+
+    public void editar(Venta venta) {
+
+        idVenta = venta.getIdVenta();
+        System.out.println("VentaCrear " + idVenta);
+        idCliente = venta.getIdCliente();
+        idTrabajador = venta.getIdTrabajador();
+        btnConsumo.setEnabled(true);
+        txtCliente.setText(nombreTrabajador);
+        //crear = false;
+        setVisible(true);
     }
 
     /**
@@ -35,9 +62,12 @@ public class frmVentaCrear extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtTrabajador = new javax.swing.JTextField();
         btnConsumo = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtCliente = new javax.swing.JTextField();
+        btnBuscarCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -60,7 +90,12 @@ public class frmVentaCrear extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Trabajador");
 
-        jTextField1.setEditable(false);
+        txtTrabajador.setEditable(false);
+        txtTrabajador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTrabajadorActionPerformed(evt);
+            }
+        });
 
         btnConsumo.setText("Ingresar Productos");
         btnConsumo.addActionListener(new java.awt.event.ActionListener() {
@@ -77,6 +112,23 @@ public class frmVentaCrear extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("Cliente");
+
+        txtCliente.setEnabled(false);
+        txtCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClienteActionPerformed(evt);
+            }
+        });
+
+        btnBuscarCliente.setText("...");
+        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,11 +139,6 @@ public class frmVentaCrear extends javax.swing.JFrame {
                         .addGap(238, 238, 238)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 748, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -100,7 +147,20 @@ public class frmVentaCrear extends javax.swing.JFrame {
                             .addComponent(btnRegistrar)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
-                                .addComponent(btnConsumo)))))
+                                .addComponent(btnConsumo))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBuscarCliente)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -114,28 +174,58 @@ public class frmVentaCrear extends javax.swing.JFrame {
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(btnBuscarCliente))
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnConsumo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnRegistrar)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        frmClienteCrear form= new frmClienteCrear();
-        form.toFront();
-        form.setVisible(true);
+
+        VentaDAOImpl ventaDAO = new VentaDAOImpl();
+        Venta venta = new Venta();
+        venta.setIdCliente(idCliente);
+        venta.setIdTrabajador(idTrabajador);
+        venta.setEstado("Aceptado");
+        ventaDAO.create(venta);
+        //btnConsumo.setEnabled(true);
+        this.dispose();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsumoActionPerformed
-        
+        if (idCliente != 0) {
+            ConsumoFrame cons = new ConsumoFrame(idVenta);
+            cons.toFront();
+            cons.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente.");
+        }
     }//GEN-LAST:event_btnConsumoActionPerformed
+
+    private void txtTrabajadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTrabajadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTrabajadorActionPerformed
+
+    private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClienteActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        ClienteVenta form = new ClienteVenta();
+        form.setVisible(true);
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,18 +257,21 @@ public class frmVentaCrear extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmVentaCrear().setVisible(true);
+                new frmVentaCrear(idVenta, idTrabajador, nombreTrabajador).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnConsumo;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    public static javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtTrabajador;
     // End of variables declaration//GEN-END:variables
 }

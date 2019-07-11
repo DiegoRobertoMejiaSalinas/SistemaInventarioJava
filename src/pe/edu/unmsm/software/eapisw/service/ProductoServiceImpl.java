@@ -132,7 +132,6 @@ public class ProductoServiceImpl {
 
     public DefaultTableModel mostrarArbolRN() {
         arbolRojoNegro = dbProducto.readArbolRojoNegro("");
-        
 
         DefaultTableModel dtm;
         String[] titulos = {"Int", "ID", "Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
@@ -143,6 +142,23 @@ public class ProductoServiceImpl {
             Producto prod = arrayL.get(i);
             Object[] fila = new Object[]{i, prod.getIdProducto(), prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
                 prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
+            dtm.addRow(fila);
+        }
+
+        return dtm;
+    }
+
+    public DefaultTableModel mostrarArbolRNVentas() {
+        arbolRojoNegro = dbProducto.readArbolRojoNegro("");
+
+        DefaultTableModel dtm;
+        String[] titulos = {"ID", "Código", "Nombre", "Stock", "Precio"};
+
+        dtm = new DefaultTableModel(null, titulos);
+        ArrayList<Producto> arrayL = arbolRojoNegro.getInOrden();
+        for (int i = 0; i < arrayL.size(); i++) {
+            Producto prod = arrayL.get(i);
+            Object[] fila = new Object[]{prod.getIdProducto(), prod.getCodigo(), prod.getNombre(), prod.getStock(), prod.getPrecio_venta()};
             dtm.addRow(fila);
         }
 
@@ -608,7 +624,7 @@ public class ProductoServiceImpl {
         ArrayList<Producto> arrayL = arbolRojoNegro.getInOrden();
 
         Ordenamiento.ArrayID(arrayL);
-     
+
         for (int i = 0; i < arrayL.size(); i++) {
             Producto prod = arrayL.get(i);
             Object[] fila = new Object[]{i, prod.getIdProducto(), prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
@@ -764,73 +780,5 @@ public class ProductoServiceImpl {
         }
         return dtm;
     }
-    
-    public DefaultTableModel busquedaBinaria(String com, String tipo) {
-        listaDoble = dbProducto.readListaDoble();
-
-        int aux1 = 0;
-        double aux2 = 0;
-
-        DefaultTableModel dtm;
-        int cantidad = this.listaDoble.getLongitud();
-        String[] titulos = {"Int", "ID", "Código", "Nombre", "Descripción", "Caracteristicas", "Stock", "Precio"};
-
-        dtm = new DefaultTableModel(null, titulos);
-
-        ListaDoble<Producto> listaRespuesta = null;
-
-        switch (tipo) {
-
-            case "codigo":
-                listaRespuesta = BusquedaBinaria.busquedaBinariaCodigo(listaDoble, com);
-                break;
-
-            case "nombre":
-                listaRespuesta = BusquedaBinaria.busquedaBinariaNombre(listaDoble, com);
-                break;
-
-            case "id":
-                try {
-                    aux1 = Integer.parseInt(com);
-                    listaRespuesta = BusquedaBinaria.busquedaBinariaID(listaDoble, aux1);
-                } catch (NumberFormatException e) {
-                }
-                break;
-
-            case "stock":
-                try {
-                    aux1 = Integer.parseInt(com);
-                    listaRespuesta = BusquedaBinaria.busquedaBinariaStock(listaDoble, aux1);
-                } catch (NumberFormatException e) {
-                }
-                break;
-
-            case "precio":
-                try {
-                    aux2 = Double.parseDouble(com);
-                    listaRespuesta = BusquedaBinaria.busquedaBinariaPrecio(listaDoble, aux2);
-                } catch (NumberFormatException e) {
-                }
-                break;
-
-            default:
-                listaRespuesta = null;
-        }
-
-        if (listaRespuesta != null) {
-            for (int i = 0; i < listaRespuesta.getLongitud(); i++) {
-                Producto prod = listaRespuesta.get(i);
-                Object[] fila = new Object[]{i, prod.getIdProducto(), prod.getCodigo(), prod.getNombre(), prod.getDescripcion(),
-                    prod.getCaracteristicas(), prod.getStock(), prod.getPrecio_venta()};
-                dtm.addRow(fila);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No se ha encontrado el producto con codigo " + com);
-        }
-        return dtm;
-
-    }
-    
-    
 
 }

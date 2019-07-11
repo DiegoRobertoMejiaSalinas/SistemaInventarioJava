@@ -137,17 +137,21 @@ public class Login extends javax.swing.JFrame {
         trabajador = impl.login(txtLogin.getText(), txtPass.getText());
 
         if (trabajador != null) {
-            this.dispose();
-            Main form= new Main();
+
+            Main form = new Main(trabajador.getIdPersona(), trabajador.getNombre());
+
             form.toFront();
             form.setVisible(true);
-            
-            if(!trabajador.getAcceso().equalsIgnoreCase("administrador")){
+
+            if (!trabajador.getAcceso().equalsIgnoreCase("administrador")) {
                 form.editMenu.setEnabled(false);
                 form.configMenu.setEnabled(false);
                 form.editMenu.setVisible(false);
                 form.configMenu.setVisible(false);
             }
+
+            this.dispose();
+
         } else {
             JOptionPane.showMessageDialog(null, "Usuario y/o Contraseña incorrecta.");
         }

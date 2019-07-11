@@ -417,7 +417,7 @@ public class frmProductoDemo extends javax.swing.JFrame {
         btnBusquedaPrecio = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(875, 569));
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -587,7 +587,7 @@ public class frmProductoDemo extends javax.swing.JFrame {
                                             .addComponent(btnSeleccion)
                                             .addComponent(btnQuicksort)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel5))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
@@ -610,8 +610,7 @@ public class frmProductoDemo extends javax.swing.JFrame {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(btnBusquedaPrecio)
                                                 .addGap(37, 37, 37)
-                                                .addComponent(jLabel7)))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addComponent(jLabel7)))))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(

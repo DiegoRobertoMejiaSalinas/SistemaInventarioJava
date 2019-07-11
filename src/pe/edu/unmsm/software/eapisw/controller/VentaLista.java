@@ -5,14 +5,12 @@
  */
 package pe.edu.unmsm.software.eapisw.controller;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import pe.edu.unmsm.software.eapisw.dao.implement.VentaDAOImpl;
+import pe.edu.unmsm.software.eapisw.dao.AccesoDB;
 import pe.edu.unmsm.software.eapisw.model.Venta;
 import pe.edu.unmsm.software.eapisw.service.VentaServiceImpl;
 
@@ -22,38 +20,30 @@ import pe.edu.unmsm.software.eapisw.service.VentaServiceImpl;
  */
 public class VentaLista extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form VentaLista
-     */
-    public VentaLista() {
+    private static int idTrabajador;
+    private static String nombreTrabajador;
+    private static int idVenta;
+    private static int idCliente;
+
+    DefaultTableModel dtm  = new DefaultTableModel();
+
+    
+
+    public VentaLista(int id, String nombre) {
         initComponents();
         this.setResizable(false);
-        grupoTipo.add(radioID);
-        grupoTipo.add(radioCliente);
-        grupoTipo.add(radioTrabajador);
-        grupoTipo.add(radioFecha);
-        grupoTipo.add(radioIgnorar);
-
-        radioIgnorar.setSelected(true);
-
         mostrarTabla();
+        idTrabajador= id;
+        nombreTrabajador= nombre;
     }
 
-    void darFormaTabla() {
-        Tabla.getColumnModel().getColumn(0).setMinWidth(40);
-        Tabla.getColumnModel().getColumn(1).setMinWidth(40);
-        Tabla.getColumnModel().getColumn(2).setMinWidth(100);
-        Tabla.getColumnModel().getColumn(3).setMinWidth(120);
-        Tabla.getColumnModel().getColumn(4).setMinWidth(150);
-        Tabla.getColumnModel().getColumn(5).setMinWidth(150);
-        Tabla.getColumnModel().getColumn(6).setMinWidth(20);
-    }
+    
 
     public void mostrarTabla() {
         VentaServiceImpl ventaService = new VentaServiceImpl();
-        DefaultTableModel modelo = ventaService.mostrar("");
+        DefaultTableModel modelo = ventaService.mostrar();
         Tabla.setModel(modelo);
-        darFormaTabla();
+
     }
 
     /**
@@ -65,21 +55,10 @@ public class VentaLista extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        grupoTipo = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        radioID = new javax.swing.JRadioButton();
-        radioCliente = new javax.swing.JRadioButton();
-        radioTrabajador = new javax.swing.JRadioButton();
-        txtBusqueda = new javax.swing.JTextField();
-        btnBuscar = new javax.swing.JButton();
-        btnOrdenar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        btnCrear = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        radioFecha = new javax.swing.JRadioButton();
-        radioIgnorar = new javax.swing.JRadioButton();
+        btnCrear = new javax.swing.JButton();
 
         setClosable(true);
 
@@ -93,33 +72,10 @@ public class VentaLista extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(Tabla);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Buscar:");
-
-        radioID.setText("ID");
-
-        radioCliente.setText("Cliente");
-
-        radioTrabajador.setText("Trabajador");
-
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-
-        btnOrdenar.setText("Ordenar");
-        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrdenarActionPerformed(evt);
-            }
-        });
-
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
 
@@ -130,208 +86,63 @@ public class VentaLista extends javax.swing.JInternalFrame {
             }
         });
 
-        btnEditar.setText("Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-
-        radioFecha.setText("Fecha");
-
-        radioIgnorar.setText("No Ordenar");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(radioID))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(radioCliente)
-                                .addGap(18, 18, 18)
-                                .addComponent(radioTrabajador)
-                                .addGap(18, 18, 18)
-                                .addComponent(radioFecha)))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addComponent(radioIgnorar)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addComponent(btnCrear)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEditar)
+                .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioID)
-                    .addComponent(radioCliente)
-                    .addComponent(radioTrabajador)
-                    .addComponent(btnOrdenar)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radioFecha))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(radioIgnorar)
-                .addContainerGap(11, Short.MAX_VALUE))
+                    .addComponent(btnCrear)
+                    .addComponent(btnEditar))
+                .addGap(20, 20, 20))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        VentaServiceImpl ventaService = new VentaServiceImpl();
-
-        String texto = txtBusqueda.getText();
-        DefaultTableModel modelo = null;
-
-        if (texto.equalsIgnoreCase("")) {
-            modelo = ventaService.mostrar("");
-        } else {
-            modelo = null;
-            if (radioID.isSelected()) {
-                modelo = ventaService.ordenar("idventa", texto);
-            } else if (radioCliente.isSelected()) {
-                modelo = ventaService.ordenar("idcliente", texto);
-
-            } else if (radioTrabajador.isSelected()) {
-                modelo = ventaService.ordenar("idtrabajador", texto);
-            } else if (radioFecha.isSelected()) {
-                modelo = ventaService.ordenar("fecha", texto);
-            } else {
-                modelo = ventaService.ordenar("", texto);
-            }
-        }
-        Tabla.setModel(modelo);
-        darFormaTabla();
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
-        VentaServiceImpl ventaService = new VentaServiceImpl();
-
-        String texto = txtBusqueda.getText();
-        DefaultTableModel modelo = null;
-
-        if (texto.equalsIgnoreCase("")) {
-            modelo = ventaService.mostrar("");
-        } else {
-            modelo = null;
-            if (radioID.isSelected()) {
-                modelo = ventaService.ordenar("idventa", "");
-            } else if (radioCliente.isSelected()) {
-                modelo = ventaService.ordenar("idcliente", "");
-
-            } else if (radioTrabajador.isSelected()) {
-                modelo = ventaService.ordenar("idtrabajador", "");
-            } else if (radioFecha.isSelected()) {
-                modelo = ventaService.ordenar("fecha", "");
-            } else {
-                modelo = ventaService.ordenar("", "");
-            }
-        }
-        Tabla.setModel(modelo);
-        darFormaTabla();
-    }//GEN-LAST:event_btnOrdenarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estas seguro de eliminar este producto?", "Confirmar", 2);
-
-        if (confirmacion == 0) {
-            try {
-                int seleccionado = Tabla.getSelectedRow();
-
-                String codigo = Tabla.getValueAt(seleccionado, 2).toString();
-
-                VentaDAOImpl dao = new VentaDAOImpl();
-                dao.delete(codigo);
-
-            } catch (ArrayIndexOutOfBoundsException e) {
-                JOptionPane.showMessageDialog(null, "Primero seleccione un producto.");
-            }
-        }
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        this.dispose();
-        frmVentaCrear crear = new frmVentaCrear();
+        frmVentaCrear crear= new frmVentaCrear(0, idTrabajador, nombreTrabajador);
         crear.setVisible(true);
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        try {
-            int seleccionado = Tabla.getSelectedRow();
-
-            int id = Integer.parseInt(Tabla.getValueAt(seleccionado, 1).toString());
-            int idCliente = Integer.parseInt(Tabla.getValueAt(seleccionado, 2).toString());
-            String nombreCliente = Tabla.getValueAt(seleccionado, 3).toString();
-            int idTrabajador = Integer.parseInt(Tabla.getValueAt(seleccionado, 4).toString());
-            String nombreTrabajador = Tabla.getValueAt(seleccionado, 5).toString();
-            Date fecha = null;
-            try {
-                fecha = (Date) new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(Tabla.getValueAt(seleccionado, 6).toString());
-            } catch (ParseException ex) {
-                JOptionPane.showMessageDialog(null, "Hubo un error al convertir la fecha");
-            }
-            String estado = Tabla.getValueAt(seleccionado, 7).toString();
-
-            Venta prod = new Venta(id, idCliente, idTrabajador, fecha, estado);
-
-            frmProductoCrear crear = new frmProductoCrear();
-            //crear.editar(prod);
-            //crear.setVisible(true);
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-            JOptionPane.showMessageDialog(null, "Primero seleccione un producto.");
+        try{
+            int fila= Tabla.getSelectedRow();
+            idVenta= Integer.parseInt(Tabla.getValueAt(fila, 0).toString());
+            idCliente= Integer.parseInt(Tabla.getValueAt(fila, 1).toString());
+            idTrabajador=Integer.parseInt(Tabla.getValueAt(fila, 3).toString());
+            nombreTrabajador= Tabla.getValueAt(fila, 4).toString();
+            
+            Venta venta= new Venta(idVenta, idCliente, idTrabajador, null, "Aceptado");
+            
+            frmVentaCrear crear= new frmVentaCrear(idVenta, idTrabajador, nombreTrabajador);
+            crear.editar(venta);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Seleccione primero un elemento");
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnOrdenar;
-    private javax.swing.ButtonGroup grupoTipo;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JRadioButton radioCliente;
-    private javax.swing.JRadioButton radioFecha;
-    private javax.swing.JRadioButton radioID;
-    private javax.swing.JRadioButton radioIgnorar;
-    private javax.swing.JRadioButton radioTrabajador;
-    private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
 }

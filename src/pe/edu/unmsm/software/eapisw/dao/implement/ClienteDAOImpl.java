@@ -16,6 +16,7 @@ import pe.edu.unmsm.software.eapisw.service.ClienteService.ClienteComparatorID;
 import pe.edu.unmsm.software.eapisw.service.ClienteService.ClienteComparatorNombre;
 import pe.edu.unmsm.software.eapisw.service.ClienteService.ClienteComparatorNumDocumento;
 import pe.edu.unmsm.software.eapisw.structure.ArbolAVL;
+import pe.edu.unmsm.software.eapisw.structure.ArbolRojoNegro;
 
 public class ClienteDAOImpl implements InterfaceDAO<Cliente, String> {
 
@@ -31,10 +32,12 @@ public class ClienteDAOImpl implements InterfaceDAO<Cliente, String> {
     ArrayList<Cliente> arrayList;
     ArbolAVL<Cliente> arbolAVL;
     ArbolAVL.NodoAVL raiz;
+    ArbolRojoNegro<Cliente> arbolRN;
 
     public ClienteDAOImpl() {
         acceso = new AccesoDB();
         arbolAVL = new ArbolAVL<>();
+        arbolRN = new ArbolRojoNegro<>();
     }
 
     @Override
@@ -166,6 +169,41 @@ public class ClienteDAOImpl implements InterfaceDAO<Cliente, String> {
         }
 
         return arrayList;
+    }
+
+    public ArbolRojoNegro readArbolRojoNegro(String com) {
+
+        String query = "Select p.idpersona, p.nombre, p.apaterno, p.amaterno, p.tipo_documento, "
+                + "p.num_documento, p.direccion, p.telefono, p.email, c.codigo_cliente from persona p inner join cliente c "
+                + "on p.idpersona=c.idpersona";
+
+        try {
+            //Obtener la conexion a la BD
+            conexion = acceso.getConexion();
+            //Preparamos la consulta a ejecutar
+            ps1 = conexion.prepareStatement(query);
+            rs = ps1.executeQuery();
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setIdPersona(rs.getInt(1));
+                cliente.setNombre(rs.getString(2));
+                cliente.setaPaterno(rs.getString(3));
+                cliente.setaMaterno(rs.getString(4));
+                cliente.setTipoDocumento(rs.getString(5));
+                cliente.setNumeroDocumento(rs.getString(6));
+                cliente.setDireccion(rs.getString(7));
+                cliente.setTelefono(rs.getString(8));
+                cliente.setEmail(rs.getString(9));
+                cliente.setCodigoCliente(rs.getString(10));
+
+                arbolRN.insertar(cliente);
+            }
+
+        } catch (SQLException e) {
+            arbolRN = null;
+        }
+        return arbolRN;
     }
 
     public ArbolAVL readArbolAVL(String com) {

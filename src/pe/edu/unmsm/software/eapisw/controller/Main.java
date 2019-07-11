@@ -11,14 +11,18 @@ package pe.edu.unmsm.software.eapisw.controller;
  */
 public class Main extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Main
-     */
-    public Main() {
+    public static int idTrabajador;
+    public static String nombreTrabajador;
+
+    public Main(int id, String nombre) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setExtendedState(Main.MAXIMIZED_BOTH);
         this.setTitle("Biconik - Sistema de Almacén");
+
+        idTrabajador = id;
+        nombreTrabajador = nombre;
+
     }
 
     /**
@@ -39,10 +43,10 @@ public class Main extends javax.swing.JFrame {
         consultMenu = new javax.swing.JMenu();
         consultClientItem = new javax.swing.JMenuItem();
         configMenu = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        workerCreate = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        helpItem = new javax.swing.JMenuItem();
+        btnDemo = new javax.swing.JMenuItem();
         btnSalir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,7 +90,7 @@ public class Main extends javax.swing.JFrame {
         consultMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/unmsm/software/eapisw/controller/files/icons/icons8-consultation-30.png"))); // NOI18N
         consultMenu.setText("Consultas");
 
-        consultClientItem.setText("Clientes");
+        consultClientItem.setText("Proveedor");
         consultClientItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 consultClientItemActionPerformed(evt);
@@ -98,25 +102,46 @@ public class Main extends javax.swing.JFrame {
 
         configMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/unmsm/software/eapisw/controller/files/icons/icons8-computer-30.png"))); // NOI18N
         configMenu.setText("Configuraciones");
+        configMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                configMenuMousePressed(evt);
+            }
+        });
 
-        jMenuItem2.setText("Usuarios y Accesos");
-        configMenu.add(jMenuItem2);
+        workerCreate.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_NUMPAD2, java.awt.event.InputEvent.CTRL_MASK));
+        workerCreate.setText("Usuarios y Accesos");
+        workerCreate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                workerCreateMouseClicked(evt);
+            }
+        });
+        workerCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                workerCreateActionPerformed(evt);
+            }
+        });
+        configMenu.add(workerCreate);
 
         menuBar.add(configMenu);
 
         helpMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/unmsm/software/eapisw/controller/files/icons/icons8-help-30.png"))); // NOI18N
         helpMenu.setText("Ayuda");
 
-        jMenuItem3.setText("Acerca de...");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        helpItem.setText("Acerca de...");
+        helpItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                helpItemActionPerformed(evt);
             }
         });
-        helpMenu.add(jMenuItem3);
+        helpMenu.add(helpItem);
 
-        jMenuItem4.setText("Ayuda");
-        helpMenu.add(jMenuItem4);
+        btnDemo.setText("DEMO");
+        btnDemo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDemoActionPerformed(evt);
+            }
+        });
+        helpMenu.add(btnDemo);
 
         menuBar.add(helpMenu);
 
@@ -146,25 +171,28 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void productEditItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productEditItemActionPerformed
-        ProductoLista prod= new ProductoLista();
+        ProductoLista prod = new ProductoLista();
         desktopPane.add(prod);
         prod.toFront();
         prod.setVisible(true);
     }//GEN-LAST:event_productEditItemActionPerformed
 
     private void workerEditItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workerEditItemActionPerformed
-        TrabajadorLista prod= new TrabajadorLista();
+        TrabajadorLista prod = new TrabajadorLista();
         desktopPane.add(prod);
         prod.toFront();
         prod.setVisible(true);
     }//GEN-LAST:event_workerEditItemActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void helpItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpItemActionPerformed
+        Ayuda ayuda= new Ayuda();
+        desktopPane.add(ayuda);
+        ayuda.toFront();
+        ayuda.setVisible(true);
+    }//GEN-LAST:event_helpItemActionPerformed
 
     private void consultClientItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultClientItemActionPerformed
-        ClienteLista prod= new ClienteLista();
+        ClienteLista prod = new ClienteLista();
         desktopPane.add(prod);
         prod.toFront();
         prod.setVisible(true);
@@ -175,11 +203,35 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirMouseClicked
 
     private void ventasMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ventasMenuMouseClicked
-        VentaLista pron= new VentaLista();
+        /*VentaLista pron = new VentaLista(idTrabajador, nombreTrabajador);
+        desktopPane.add(pron);
+
+        pron.toFront();
+        pron.setVisible(true);*/
+    }//GEN-LAST:event_ventasMenuMouseClicked
+
+    private void workerCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_workerCreateMouseClicked
+        TrabajadorCrear pron = new TrabajadorCrear();
         desktopPane.add(pron);
         pron.toFront();
         pron.setVisible(true);
-    }//GEN-LAST:event_ventasMenuMouseClicked
+    }//GEN-LAST:event_workerCreateMouseClicked
+
+    private void configMenuMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_configMenuMousePressed
+        
+    }//GEN-LAST:event_configMenuMousePressed
+
+    private void workerCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workerCreateActionPerformed
+        TrabajadorCrear pron = new TrabajadorCrear();
+        desktopPane.add(pron);
+        pron.toFront();
+        pron.setVisible(true);
+    }//GEN-LAST:event_workerCreateActionPerformed
+
+    private void btnDemoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDemoActionPerformed
+        frmProductoDemo demo= new frmProductoDemo();
+        demo.setVisible(true);
+    }//GEN-LAST:event_btnDemoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -211,25 +263,25 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                new Main(idTrabajador, nombreTrabajador).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btnDemo;
     private javax.swing.JMenu btnSalir;
     public static javax.swing.JMenu configMenu;
     private javax.swing.JMenuItem consultClientItem;
     private javax.swing.JMenu consultMenu;
     private javax.swing.JDesktopPane desktopPane;
     public static javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem helpItem;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem productEditItem;
     private javax.swing.JMenu ventasMenu;
+    private javax.swing.JMenuItem workerCreate;
     private javax.swing.JMenuItem workerEditItem;
     // End of variables declaration//GEN-END:variables
 

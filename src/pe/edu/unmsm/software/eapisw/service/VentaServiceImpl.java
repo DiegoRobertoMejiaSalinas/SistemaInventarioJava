@@ -13,21 +13,23 @@ import pe.edu.unmsm.software.eapisw.dao.implement.VentaDAOImpl;
 public class VentaServiceImpl {
 
     private VentaDAOImpl dbventa;
-    String[] titulos = {"ID", "IDCliente", "Cliente", "IDTrabajador",
-        "Trabajador", "Fecha", "Estado"};
+    String[] titulos = {"IDVenta", "IDCliente", "Cliente", "IDTrabajador",
+        "Trabajador", "Estado"};
+    
+    ArrayList<String[]> registro;
 
     public VentaServiceImpl() {
         dbventa = new VentaDAOImpl();
     }
 
-    public DefaultTableModel mostrar(String buscar) {
-        ArrayList registro = dbventa.readString("", buscar);
+    public DefaultTableModel mostrar() {
+        registro = dbventa.readString();
+        
+        System.out.println((Object) registro);
 
         DefaultTableModel dtm;
 
         dtm = new DefaultTableModel(null, titulos);
-
-        System.out.println(registro);
 
         for (int i = 0; i < registro.size(); i++) {
             dtm.addRow((Object[]) registro.get(i));
@@ -36,8 +38,8 @@ public class VentaServiceImpl {
         return dtm;
     }
 
-    public DefaultTableModel ordenar(String com, String buscar) {
-        ArrayList registro = dbventa.readString(com, buscar);
+    public DefaultTableModel ordenar() {
+        ArrayList registro = dbventa.readString();
 
         DefaultTableModel dtm;
 
